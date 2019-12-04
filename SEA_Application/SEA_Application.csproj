@@ -354,6 +354,7 @@
     <Compile Include="Controllers\PenaltyFeesController.cs" />
     <Compile Include="Controllers\Principal_DashboardController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\SessionIDStaticController.cs" />
     <Compile Include="Controllers\StudentDiscountsController.cs" />
     <Compile Include="Controllers\StudentFeeMonthsController.cs" />
     <Compile Include="Controllers\StudentFeeMultipliersController.cs" />
@@ -3238,6 +3239,7 @@
     <Folder Include="Views\AspNetFinanceVoucherRecords\" />
     <Folder Include="Views\Global\" />
     <Folder Include="Views\ParentTeacherMeeting\" />
+    <Folder Include="Views\SessionIDStatic\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

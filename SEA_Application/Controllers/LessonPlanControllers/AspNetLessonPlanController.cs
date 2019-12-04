@@ -24,6 +24,7 @@ namespace SEA_Application.Controllers.LessonPlanControllers
         public ActionResult Index()
         {
             var aspNetLessonPlans = db.AspNetLessonPlans.Include(a => a.AspNetSubject);
+            var session = SessionIDStaticController.GlobalSessionID;
             return View(aspNetLessonPlans.ToList());
         }
 

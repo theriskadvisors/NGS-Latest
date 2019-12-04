@@ -127,11 +127,21 @@ namespace SEA_Application.Controllers
             //RecurringJob.AddOrUpdate(() => DoStuff(), Cron.Daily);
 
             var userID = User.Identity.GetUserId();
-            ViewBag.SessionID = new SelectList(db.AspNetSessions, "Id", "SessionName");
+            //ViewBag.SessionID = new SelectList(db.AspNetSessions, "Id", "SessionName");
+
+            ViewBag.SessionID = db.AspNetSessions.ToList().Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.SessionName,
+                    Selected = (x.Status == "Active")
+                });
+
             try
             {
                 if (userID != null)
                 {
+                    SessionIDStaticController.GlobalSessionID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id.ToString();
+
                     if (UserManager.IsInRole(userID, "Teacher"))
                     {
                         System.Web.HttpContext.Current.Session["TeacherID"] = userID;
@@ -284,6 +294,7 @@ namespace SEA_Application.Controllers
                     }
                     var startdate = DateTime.Now;
                     LogTime(startdate, userID);
+                    
 
                     //else { 
                     //    }
@@ -380,6 +391,7 @@ namespace SEA_Application.Controllers
                     }
                     var startdate = DateTime.Now;
                     LogTime(startdate, userID);
+                    SessionIDStaticController.GlobalSessionID = model.SessionID;
 
                     //else { 
                     //    }
