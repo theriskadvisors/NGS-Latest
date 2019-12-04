@@ -11,6 +11,7 @@ namespace SEA_Application.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
+            //hi
             return View();
         }
 
