@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetLessonPlanBreakdownHeading
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetLessonPlanBreakdownHeading()
         {
             this.AspNetLessonPlanBreakdowns = new HashSet<AspNetLessonPlanBreakdown>();
@@ -22,6 +23,7 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public string BreakDownHeadingName { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetLessonPlanBreakdown> AspNetLessonPlanBreakdowns { get; set; }
     }
 }

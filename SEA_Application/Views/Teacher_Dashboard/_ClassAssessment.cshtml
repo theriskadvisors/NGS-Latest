@@ -5,7 +5,7 @@
 
 
     $(document).ready(function () {
-       
+
         debugger;
         var classcookieval = null;
         var allcookies = document.cookie;
@@ -32,10 +32,10 @@
         }
 
 
-        $("#ClassID").change(function () {
-            //debugger;
+        function getUserList() {
+
             $('.eeniart0017').css("display", "block");
-            
+
             var selectedClass = $("#ClassID").val();
             $.get('@Url.Action("StudentsByClass_Teacher", "TermAssessment")',
                 { id: selectedClass },
@@ -62,8 +62,29 @@
                         $('#myModal2').modal('show');
                     }
                 });
+
+        }
+
+        $("#ClassID").change(function () {
+            var trrmid = $("#TermID").val();
+            var classId = $("#ClassID").val();
+
+            if (trrmid != "" && classId != "") {
+                getUserList()
+            }
+
         });
-        
+
+        $("#TermID").change(function () {
+            var classId = $("#ClassID").val();
+            var trrmid = $("#TermID").val();
+
+            if (trrmid != "" && classId != "") {
+                getUserList()
+            }
+
+        });
+
         //$("#Print").click(function () {
         //    debugger;
         //    var restorepage = $('body').html();
@@ -80,7 +101,7 @@
     function Print()
     {
         debugger;
-        
+
             var restorepage = $('body').html();
             var printcontent = $('#load').clone();
             $('body').empty().html(printcontent);
@@ -96,7 +117,7 @@
         //printWindow.print();
         //printWindow.close();
         //return false;
-        
+
     }
     function selectclasschange() {
         var selectedClass = $("#ClassID").val();
@@ -137,11 +158,11 @@
             data: { 'tc': tc, 'stdid': stdid, 'termid': termid, 'type': 'teacher' },
             success: function () {
             }
-      
+
         });
     }
     function Student_Evaluation(item) {
- 
+
 
         $('.eeniart0017').css("display", "block");
         $('#hidden').val(item.id);
@@ -153,7 +174,7 @@
         $("#pStudentName").html(name);
 
         var cn = $("#ClassID").val();
-        
+
         name = item.closest("tr");
         $("#trId").val(name.id);
 
@@ -171,14 +192,14 @@
                     var classname = data.classname;
                     var studentname = data.studentname;
                     var teachername = data.teachername;
-                 
+
                     var termid = data.TId;
                     var subjects = data.Value
                     var teacherComment = data.teacherComent;
                     var parentComment=data.parentComment;
                     var principalcomment=data.principalcomment;
                     $('#Evaluation_data').html('');
-            
+
                     $("#className").html(classname+' Progress Report');
                     $("#stdname").html(studentname);
                     $("#teachername").html(teachername);
@@ -196,8 +217,8 @@
                         //.append($('<div>').addClass('icheckbox_flat-blue').css({ "position": "relative" }).attr("id", Data.Id).click(Singlecheak).data(Data)
                         $('#Evaluation_Question_Table').append($('<tr>').attr("id", Data.Id).click(Data, Reportit).data(Data).append(dfdf))
                         $('#Evaluation_Question_Table').append($('<tr>').append($('<td>').attr("id", "eeniart" + Data.Id).attr("colspan", "2")))
-                    }                  
-                    $('#TC').val(teacherComment);                    
+                    }
+                    $('#TC').val(teacherComment);
                     $('#PC').val(parentComment);
                     $('#PrC').val(principalcomment);
                 }
@@ -233,7 +254,7 @@
     }
 
     function Reportit(e) {
-        
+
         //var subid = e.parentElement.parentElement.id;
         var sub = e.data;
         var trrmid = $("#TermID").val();
@@ -246,7 +267,7 @@
                 $('.eeniart0017').css("display", "none");
                 if (data.status == "success") {
                     openquesrom(sub.Id);
-              
+
                     var questions = data.Value
                     var category = data.categoryname
                     var appendarea = $("#Evaluation_Question_Table").find("#eeniart" + sub.Id)[0]
@@ -254,22 +275,22 @@
                     var ddder = $('<tr style="border-bottom:1px solid #f4f4f4;"><th></th><th class="form-group"><div class="col-md-4"></div><div class="col-md-8"><div class="col-md-2 eeniart001">1st Term</div><div class="col-md-2 eeniart001">2nd Term</div><div class="col-md-2 eeniart001">3rd Term</div></div></th></tr>')
                     var ddder1 = $('<tr style="border-bottom:1px solid #f4f4f4;"><th>Headings</th><th class="form-group"><div class="col-md-6 col-md-offset-1 eeniart001">Term Evaluation</div></th></tr>')
                     if (data.ClassId == 88 || data.ClassId == 89 || data.ClassId == 91 || data.ClassId == 95 || data.ClassId == 96) {
-                       
+
                             //$("#key").append('<h4 style="font-family:Times New Roman, Times, serif;">KEY</h4>' +
                             //    '<div class="col-md-12" style="border:1px solid black; margin-bottom:30px">' +
                             //   '<div class="col-md-3"><span style="font-size: 15px"><b>Y</b> - Yes</span></div>' +
                             //   '<div class="col-md-3"><span style="font-size: 15px"><b>W</b> - With Help</span></div>' +
                             //   '<div class="col-md-3"><span style="font-size: 15px"><b>N</b> - Not Yet</span></div>' +
                             //   '<div class="col-md-3"><span style="font-size: 15px"><b>X</b> - Not Assessed</span></div></div>')
-                        
-                       
+
+
                         $("#sub" + sub.Id).append(ddder)
                     }
                     else if (data.ClassId == 86 || data.ClassId == 87 || data.ClassId == 92 || data.ClassId == 93 || data.ClassId == 94) {
-                        
+
                         $("#sub" + sub.Id).append(ddder1)
                     }
-               
+
                     if (category.length > 1 && (e.data.SubjectName == "English Language Development" || e.data.SubjectName == "Urdu Language Development"))
                     {
                         for (var j = 0; j < category.length; j++)
@@ -328,7 +349,7 @@
                                         //}
 
                                         //.append($('<div>').addClass('icheckbox_flat-blue').css({ "position": "relative" }).attr("id", Data.Id).click(Singlecheak).data(Data)
-                                      
+
                                         if (trrmid == 22) {
                                             var que1tr = $('<tr style=" border-bottom: 1px solid #f4f4f4;"><td style="width:30%">' + Data.Question + '</td><td class="form-group">' +
                                                 '<div class="col-md-4"></div><div class="col-md-4" style="float:left">' +
@@ -426,7 +447,7 @@
                     }
                     else {
                         for (var i = 0; i < questions.length; i++) {
-                            
+
                                 var Data = questions[i];
                                 if (data.ClassId == 88 || data.ClassId == 89 || data.ClassId == 91 || data.ClassId == 95 || data.ClassId == 96) {
 
@@ -474,7 +495,7 @@
                                     //}
 
                                     //.append($('<div>').addClass('icheckbox_flat-blue').css({ "position": "relative" }).attr("id", Data.Id).click(Singlecheak).data(Data)
-                                   
+
                                     if (trrmid == 22) {
                                         var que1tr = $('<tr style=" border-bottom: 1px solid #f4f4f4;"><td style="width:30%">' + Data.Question + '</td><td class="form-group">' +
                                             '<div class="col-md-4"></div><div class="col-md-4" style="float:left">' +
@@ -565,13 +586,13 @@
                                 $("#sub" + sub.Id).append(que1tr)
 
 
-                            
+
                         }
 
 
                     }
-                   
-                    
+
+
 
                 } else {
 
@@ -592,9 +613,9 @@
     }
     function openquesrom(e) {
         var questionstr = $("#Evaluation_Question_Table").find("#eeniart" + e);
-        
+
     }
-    
+
     function goodert(e) {
         debugger;
        // alert(e.value);
@@ -633,7 +654,7 @@
             data: { Ques: qid, Grade: grade },
             success: function (data) {
                 if (data.status == "success") {
-                    
+
 
 
                 } else {
@@ -667,9 +688,9 @@
         $(id).find("td span").css({ "color": "#3c763d" })
 
     }
-   
 
- 
+
+
 
 
 
@@ -678,20 +699,20 @@
         var i = 0;
         var trrmid = $("#TermID").val();
         var studentId = $("#hidden").val();
-        $.ajax({            
+        $.ajax({
             type: "POST",
             url: "/TermAssessment/PrintPreviewData",
             data: { StudentId: studentId, "type": "teacher", TermId: trrmid },
-            success: function (data) {           
-                var s = 0;                                     
-                $.each(data.subValue, function (i, item) {                   
+            success: function (data) {
+                var s = 0;
+                $.each(data.subValue, function (i, item) {
                     var subjectid = data.subValue[i];
                     var SId = subjectid.Id;
                     $('.eeniart0017').css("display", "block");
                     $.ajax({
                         type: "POST",
                         url: "/TermAssessment/Assessment_PrintPreview",
-                        data: { StudentId: studentId, SID: SId},                     
+                        data: { StudentId: studentId, SID: SId},
                         success: function (data1) {
                             $('.eeniart0017').css("display", "none");
                             if (data.ClassId == 88 || data.ClassId == 89 || data.ClassId == 91 || data.ClassId == 95 || data.ClassId == 96)
@@ -856,11 +877,11 @@
                                                 '<link href="~/AdminLTE/bootstrap/css/bootstrap.css" rel="stylesheet" />' +
                                                 '<link type="text/css" rel="stylesheet" media="print" href="/css/print.css" />' +
                                                 '<table style="width:100%;margin-bottom:-0.5%"><tr><th style="width:50%"><span class="col-xs-12" style="text-align:left;display:block;font-size: 120%;margin-bottom:5px;margin-top:5px;border:1px solid black"><b>' + Subject.SubjectName + '</b></span></th><th><span class="col-xs-12" style="text-align:left;display:block;font-size: 120%;margin-bottom:5px;margin-top:5px;border:1px solid black"><b>TERM EVALUATION</b></span></th></tr></div><br />');
-                                
+
                                 for (var k = 0; k < data1.Value.length; k++) {
-                                   
+
                                     var quesGrade = data1.Value[k];
-                          
+
 
                                     if (trrmid == 22) {
                                         if (quesGrade.FirstTermGrade == "a") {
@@ -881,7 +902,7 @@
 
                                         var que1tr = $('<table style="width:100%;"><tr style=" border-bottom: 1px solid #f4f4f4;width=100%;"><td style="width:50%;border-left:0.5px solid black;border-right:0.5px solid black;border-bottom:0.5px solid black">' + quesGrade.Question + '</td><td class="form-group" style="border-bottom:0.5px solid black;border-right:0.5px solid black"><div class="col-md-6 eeniart001">' + dffdf1 + '</div></td></tr></table>');
                                     }
-                                    
+
                                     else if (trrmid == 23) {
                                         if (quesGrade.SecondTermGrade == "b") {
                                             var dffdf1 = 'GOOD';
@@ -917,34 +938,34 @@
                                         else if (quesGrade.ThirdTermGrade == "d") {
                                             var dffdf1 = 'CAUSE FOR CONCERN';
                                         }
-                                        
+
                                         var que1tr = $('<table style="width:100%"><tr style=" border-bottom: 1px solid #f4f4f4;width=100%;"><td style="width:50%;border:0.5px solid black">' + quesGrade.Question + '</td><td class="form-group" style="border:0.5px solid black"><div class="col-md-6 eeniart001">' + dffdf1 + '</div></td></tr></table>');
                                     }
 
                                     $("#mainN"+s).append(que1tr);
-                                
-                        
+
+
 
                                 }
                                 s++;
                                 }
-                            
-                                
-                                                            
-                               
+
+
+
+
                         }
-                        
+
                     });
 
                 });
-               
-               
+
+
             }
         });
-        
+
     }
-    
-   
+
+
 </script>
 <label>@Html.ActionLink("Home", "Dashboard", "Account") > <b><a href="#">Class Assessment</a></b> </label>
 <h4>Class Assessment</h4>

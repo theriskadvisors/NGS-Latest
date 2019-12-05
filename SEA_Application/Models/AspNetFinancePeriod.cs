@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetFinancePeriod
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetFinancePeriod()
         {
             this.AspNetFinanceMonths = new HashSet<AspNetFinanceMonth>();
@@ -22,6 +23,7 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public string Year { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetFinanceMonth> AspNetFinanceMonths { get; set; }
     }
 }

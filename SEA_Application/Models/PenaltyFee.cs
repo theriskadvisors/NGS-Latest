@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class PenaltyFee
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PenaltyFee()
         {
             this.StudentPenalties = new HashSet<StudentPenalty>();
@@ -23,6 +24,7 @@ namespace SEA_Application.Models
         public string Name { get; set; }
         public Nullable<decimal> Amount { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentPenalty> StudentPenalties { get; set; }
     }
 }

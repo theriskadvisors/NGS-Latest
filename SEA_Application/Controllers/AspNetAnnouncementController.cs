@@ -17,7 +17,7 @@ namespace SEA_Application.Controllers
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
 
         string TeacherID;
-
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         public AspNetAnnouncementController()
         {
@@ -26,7 +26,7 @@ namespace SEA_Application.Controllers
         // GET: AspNetAnnouncement
         public ActionResult Index()
         {
-            return View(db.AspNetAnnouncements.ToList());
+            return View(db.AspNetAnnouncements.Where(x=> x.SessionID == SessionID).ToList());
         }
 
         // GET: AspNetAnnouncement/Details/5
@@ -48,8 +48,8 @@ namespace SEA_Application.Controllers
         public ActionResult Create()
         {
             string Id = User.Identity.GetUserId();
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             return View();
         }
 
@@ -120,6 +120,7 @@ namespace SEA_Application.Controllers
                     NotificationObj.SenderID = User.Identity.GetUserId();
                     NotificationObj.Time = DateTime.Now;
                     NotificationObj.Url = "/AspNetAnnouncement/details/" + aspNetAnnouncement.Id;
+                    NotificationObj.SessionID = SessionID;
                     db.AspNetNotifications.Add(NotificationObj);
                     db.SaveChanges();
 
@@ -156,14 +157,9 @@ namespace SEA_Application.Controllers
                         db.AspNetNotification_User.Add(notificationRecieve);
                         db.SaveChanges();
                     }
-
-
-
-
-
+                   
                     dbContextTransaction.Commit();
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
                     var UserNameLog = User.Identity.Name;
                     AspNetUser a = db.AspNetUsers.First(x => x.UserName == UserNameLog);

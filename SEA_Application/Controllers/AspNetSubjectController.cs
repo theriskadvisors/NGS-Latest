@@ -15,17 +15,18 @@ namespace SEA_Application.Controllers
     public class AspNetSubjectController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         // GET: AspNetSubject
         public ActionResult Index()
         {
-            var aspNetSubjects = db.AspNetSubjects.Include(a => a.AspNetClass).Include(a => a.AspNetUser);
+            var aspNetSubjects = db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID).Include(a => a.AspNetClass).Include(a => a.AspNetUser);
             return View(aspNetSubjects.ToList());
         }
 
         public JsonResult AllSubjects()
         {
-            var subjects = db.AspNetSubjects.Where(x=>x.Status!="false").Select(x=> new { x.Id, x.AspNetUser.Name, x.SubjectName, x.AspNetClass.ClassName }).ToList();
+            var subjects = db.AspNetSubjects.Where(x=>x.Status!="false" && x.AspNetClass.SessionID == SessionID).Select(x=> new { x.Id, x.AspNetUser.Name, x.SubjectName, x.AspNetClass.ClassName }).ToList();
 
             return Json(subjects, JsonRequestBehavior.AllowGet);
         }
@@ -33,7 +34,7 @@ namespace SEA_Application.Controllers
 
         public JsonResult SubjectSearch(string searchdata)
         {
-            var subjects = db.AspNetSubjects.Where(x => x.SubjectName.Contains(searchdata)).Select(x => new {
+            var subjects = db.AspNetSubjects.Where(x => x.SubjectName.Contains(searchdata) && x.AspNetClass.SessionID == SessionID).Select(x => new {
                 x.AspNetUser.Name,
                 x.Id,
                 x.SubjectName
@@ -46,14 +47,14 @@ namespace SEA_Application.Controllers
 
         public ActionResult ClassIndex()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
            return View();
 
         }
 
         public ActionResult ClassIndexs()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName");
             ViewBag.Error = "Subject Created successfully";
             return View("ClassIndex");
 
@@ -64,11 +65,11 @@ namespace SEA_Application.Controllers
             List<AspNetSubject> SubjectList;
             if(ClassId==0)
             {
-                SubjectList = db.AspNetSubjects.Select(x => x).ToList();
+                SubjectList = db.AspNetSubjects.Select(x => x).Where(y => y.AspNetClass.SessionID == SessionID).ToList();
             }
             else
             {
-                SubjectList = db.AspNetSubjects.Where(x => x.ClassID == ClassId).Select(x => x).ToList();
+                SubjectList = db.AspNetSubjects.Where(x => x.ClassID == ClassId).Where(x=> x.AspNetClass.SessionID == SessionID).Select(x => x).ToList();
             }
 
             ExcelPackage pck = new ExcelPackage();
@@ -85,8 +86,6 @@ namespace SEA_Application.Controllers
                 ws.Cells[string.Format("A{0}", rowStart)].Value = item.SubjectName;
                 ws.Cells[string.Format("B{0}", rowStart)].Value = item.AspNetUser.UserName;
                 ws.Cells[string.Format("C{0}", rowStart)].Value = item.AspNetClass.Class;
-               
-
                 rowStart++;
             }
             ws.Cells["A:AZ"].AutoFitColumns();
@@ -101,7 +100,7 @@ namespace SEA_Application.Controllers
 
         public ActionResult Indexs()
         {
-            var aspNetClasses = db.AspNetClasses.Include(a => a.AspNetUser);
+            var aspNetClasses = db.AspNetClasses.Where(x=> x.SessionID == SessionID).Include(a => a.AspNetUser);
             ViewBag.Error = "Class created successfully";
             return View("Index", aspNetClasses.ToList());
         }
@@ -123,7 +122,7 @@ namespace SEA_Application.Controllers
             else
             {
                 var AllSubjects = (from subject in db.AspNetSubjects
-                                   where subject.Status != "false"
+                                   where subject.Status != "false" && subject.AspNetClass.SessionID == SessionID
                                    select new { subject.Id, subject.AspNetUser.Name, subject.SubjectName }).ToList();
 
                 return Json(AllSubjects, JsonRequestBehavior.AllowGet);
@@ -146,16 +145,28 @@ namespace SEA_Application.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName", aspNetSubject.ClassID);
-            ViewBag.TeacherID = new SelectList(db.AspNetUsers, "Id", "Name", aspNetSubject.TeacherID);
+            
+            var teachers = (from teacher in db.AspNetUsers.Where(x => x.Status != "False")
+                            join t2 in db.AspNetUsers_Session.Where(s => s.SessionID == SessionID)
+                            on teacher.Id equals t2.UserID
+                            where teacher.AspNetRoles.Select(y => y.Name).Contains("Teacher")
+                            select new
+                            {
+                                teacher.Id,
+                                teacher.Name,
+                            }).ToList();
+
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName", aspNetSubject.ClassID);
+            ViewBag.TeacherID = new SelectList(teachers, aspNetSubject.TeacherID);
+
             return View(aspNetSubject);
         }
 
         // GET: AspNetSubject/Create
         public ActionResult Create()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
-            ViewBag.TeacherID = new SelectList(db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Teacher")), "Id", "Name");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
+            ViewBag.TeacherID = new SelectList(db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Teacher") && x.AspNetUsers_Session.Any(z=> z.SessionID == SessionID)), "Id", "Name");
             return View();
         }
 

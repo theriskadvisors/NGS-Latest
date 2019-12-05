@@ -16,20 +16,17 @@ namespace SEA_Application.Controllers
     public class AspNetClassController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
-
-
-
-
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         public ActionResult Index()
         {
 
             var aspNetClasses = (from cls in db.AspNetClasses.Include(a => a.AspNetUser)
-
-                                 where cls.SessionID == 17
+                                 where cls.SessionID == SessionID
                                  select cls);
             return View(aspNetClasses.ToList());
         }
+
         //        public ActionResult Index()
         //        {
         //            var aspNetClasses = (from cls in db.AspNetClasses.Include(a => a.AspNetUser)
@@ -39,6 +36,7 @@ namespace SEA_Application.Controllers
         //                                 select cls);
         //            return View(aspNetClasses.Distinct().ToList());
         //        }
+
         public void ClassExcelRecord()
         {
             SEA_DatabaseEntities db = new SEA_DatabaseEntities();
@@ -53,7 +51,6 @@ namespace SEA_Application.Controllers
             ws.Cells["B1"].Value = "Teacher";
             ws.Cells["C1"].Value = "Class";
             ws.Cells["D1"].Value = "Section";
-
 
             int rowStart = 2;
             foreach (var item in ClassList)
@@ -99,7 +96,7 @@ namespace SEA_Application.Controllers
 
             try
             {
-                var check = db.AspNetClasses.Where(x => x.ClassName == ClassName).ToList();
+                var check = db.AspNetClasses.Where(x => x.ClassName == ClassName && x.SessionID == SessionID).ToList();
 
                 if (check.Count > 0)
                 {
@@ -132,7 +129,7 @@ namespace SEA_Application.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,ClassName,Class,Section,TeacherID")] AspNetClass aspNetClass)
         {
-            aspNetClass.SessionID = Int32.Parse("17"); 
+            aspNetClass.SessionID = SessionID;
             var transactionObj = db.Database.BeginTransaction();
             try
             { 
@@ -207,9 +204,9 @@ namespace SEA_Application.Controllers
                             Class.Section = "";
                         }
                         Class.TeacherID = Teacher.Id;
+                        Class.SessionID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
                         db.AspNetClasses.Add(Class);
                         db.SaveChanges();
-
                     }
                 }
                 dbTransaction.Commit();

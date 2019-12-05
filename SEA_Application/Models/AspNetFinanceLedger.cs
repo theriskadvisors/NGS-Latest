@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetFinanceLedger
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetFinanceLedger()
         {
             this.AspNetClass_FeeType = new HashSet<AspNetClass_FeeType>();
@@ -34,11 +35,14 @@ namespace SEA_Application.Models
         public string ShowIndividual { get; set; }
         public Nullable<int> SessionID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetClass_FeeType> AspNetClass_FeeType { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetFeeType> AspNetFeeTypes { get; set; }
         public virtual AspNetFinanceLedger AspNetFinanceLedgers1 { get; set; }
         public virtual AspNetFinanceLedger AspNetFinanceLedger1 { get; set; }
         public virtual AspNetSession AspNetSession { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetStudent_PaymentDetail> AspNetStudent_PaymentDetail { get; set; }
     }
 }

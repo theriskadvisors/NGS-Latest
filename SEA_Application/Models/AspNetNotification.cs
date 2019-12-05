@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetNotification
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetNotification()
         {
             this.AspNetNotification_User = new HashSet<AspNetNotification_User>();
@@ -29,6 +30,7 @@ namespace SEA_Application.Models
     
         public virtual AspNetSession AspNetSession { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetNotification_User> AspNetNotification_User { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetLessonPlan
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetLessonPlan()
         {
             this.AspNetLessonPlan_Topic = new HashSet<AspNetLessonPlan_Topic>();
@@ -26,8 +27,10 @@ namespace SEA_Application.Models
         public Nullable<int> Duration { get; set; }
         public Nullable<int> SubjectID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetLessonPlan_Topic> AspNetLessonPlan_Topic { get; set; }
         public virtual AspNetSubject AspNetSubject { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetLessonPlanBreakdown> AspNetLessonPlanBreakdowns { get; set; }
     }
 }

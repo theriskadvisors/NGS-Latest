@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetCatalog
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetCatalog()
         {
             this.AspNetSubject_Catalog = new HashSet<AspNetSubject_Catalog>();
@@ -22,6 +23,7 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public string CatalogName { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetSubject_Catalog> AspNetSubject_Catalog { get; set; }
     }
 }

@@ -16,7 +16,9 @@ namespace SEA_Application.Controllers
     public class AspNetHomeworksController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         private string TeacherID;
+
         public AspNetHomeworksController()
         {
 
@@ -27,19 +29,19 @@ namespace SEA_Application.Controllers
         {
             if (User.IsInRole("Principal"))
             {
-                ViewBag.ClassIDs = new SelectList(db.AspNetClasses, "Id", "ClassName");
+                ViewBag.ClassIDs = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
             }
             else
             {
-                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             }
-            var aspNetHomeworks = db.AspNetHomeworks.Include(a => a.AspNetClass).OrderByDescending(p => p.Date).ToList();
+            var aspNetHomeworks = db.AspNetHomeworks.Where(x=> x.AspNetClass.SessionID == SessionID).Include(a => a.AspNetClass).OrderByDescending(p => p.Date).ToList();
             
             return View(aspNetHomeworks.ToList());
         }
         public ActionResult successmessage()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
 
             ViewBag.Error = "Diary successfully assigned";
             return View("Index");
@@ -62,8 +64,7 @@ namespace SEA_Application.Controllers
         // GET: AspNetHomeworks/Create 
         public ActionResult Create()
         {
-
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             return View();
         }
 
@@ -82,7 +83,7 @@ namespace SEA_Application.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ClassId = new SelectList(db.AspNetClasses, "Id", "ClassName", aspNetHomework.ClassId);
+            ViewBag.ClassId = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName", aspNetHomework.ClassId);
             return View(aspNetHomework);
         }
 
@@ -253,6 +254,7 @@ namespace SEA_Application.Controllers
             NotificationObj.SenderID = User.Identity.GetUserId();
             NotificationObj.Time = DateTime.Now;
             NotificationObj.Url = "/AspNetHomework/Details/" + aspNetHomework.ClassId;
+            NotificationObj.SessionID = SessionID;
             db.AspNetNotifications.Add(NotificationObj);
             db.SaveChanges();
 

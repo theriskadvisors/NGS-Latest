@@ -13,6 +13,7 @@ namespace SEA_Application.Controllers
     public class AspNetChapterController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         private string TeacherID;
         public AspNetChapterController()
@@ -24,7 +25,7 @@ namespace SEA_Application.Controllers
         // GET: AspNetChapter
         public ActionResult Index()
         {
-            var aspNetChapters = db.AspNetChapters.Include(a => a.AspNetSubject);
+            var aspNetChapters = db.AspNetChapters.Where(x=> x.AspNetSubject.AspNetClass.SessionID == SessionID).Include(a => a.AspNetSubject);
             return View(aspNetChapters.ToList());
         }
 
@@ -46,8 +47,8 @@ namespace SEA_Application.Controllers
         // GET: AspNetChapter/Create
         public ActionResult Create()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             return View();
         }
 
@@ -67,7 +68,7 @@ namespace SEA_Application.Controllers
                 return View("../Teacher_Dashboard/_Topics");
             }
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetChapter.SubjectID);
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetChapter.SubjectID);
             
             return View(aspNetChapter);
         }

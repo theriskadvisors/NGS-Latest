@@ -16,7 +16,9 @@ namespace SEA_Application.Controllers
     public class AspNetStudentPerformanceReportController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         private string TeacherID;
+
         public AspNetStudentPerformanceReportController()
         {
 
@@ -28,20 +30,20 @@ namespace SEA_Application.Controllers
             if (User.IsInRole("Teacher"))
             {
                 var TeacherId = User.Identity.GetUserId();
-                ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.TeacherID == TeacherId), "Id", "ClassName");
-                var aspNetStudentPerformanceReports = db.AspNetStudentPerformanceReports.Where(x => x.AspNetSubject.AspNetClass.TeacherID == TeacherID && x.AspNetSubject.AspNetClass.AspNetSession.Id == 17).Select(x => x).ToList();
+                ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.TeacherID == TeacherId && x.SessionID == SessionID ), "Id", "ClassName");
+                var aspNetStudentPerformanceReports = db.AspNetStudentPerformanceReports.Where(x => x.AspNetSubject.AspNetClass.TeacherID == TeacherID && x.AspNetSubject.AspNetClass.AspNetSession.Id == SessionID).Select(x => x).ToList();
                 return View(aspNetStudentPerformanceReports);
             }
             else if(User.IsInRole("Principal"))
             {
                 var TeacherId = User.Identity.GetUserId();
-                ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.TeacherID == TeacherId), "Id", "ClassName");
-                var aspNetStudentPerformanceReports = db.AspNetStudentPerformanceReports.Where(x => x.AspNetSubject.AspNetClass.TeacherID == TeacherID).Select(x => x).ToList();
+                ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.TeacherID == TeacherId && x.SessionID == SessionID), "Id", "ClassName");
+                var aspNetStudentPerformanceReports = db.AspNetStudentPerformanceReports.Where(x => x.AspNetSubject.AspNetClass.TeacherID == TeacherID && x.AspNetSubject.AspNetClass.SessionID == SessionID).Select(x => x).ToList();
                 return View(aspNetStudentPerformanceReports);
             }
             else
             {
-                var aspNetStudentPerformanceReports = db.AspNetStudentPerformanceReports.Select(x => x).ToList();
+                var aspNetStudentPerformanceReports = db.AspNetStudentPerformanceReports.Where(x=> x.AspNetSubject.AspNetClass.SessionID == SessionID).Select(x => x).ToList();
                 return View(aspNetStudentPerformanceReports);
             }
         }
@@ -66,10 +68,10 @@ namespace SEA_Application.Controllers
         // GET: AspNetStudentPerformanceReport/Create
         public ActionResult Create()
         {
-           var ClassId =  db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct().FirstOrDefault().Id;
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+           var ClassId =  db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct().FirstOrDefault().Id;
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
           //  ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => x.AspNetClass.Id == ClassId), "Id", "SubjectName");
-            ViewBag.StudentID = new SelectList(db.AspNetStudents.Where(x=> x.AspNetUser.Status != "False"), "Id", "AspNetUser.Name");
+            ViewBag.StudentID = new SelectList(db.AspNetStudents.Where(x=> x.AspNetUser.Status != "False" && x.AspNetStudent_Session_class.Any(y=> y.SessionID == SessionID)), "Id", "AspNetUser.Name");
 
             return View();
         }
@@ -81,7 +83,7 @@ namespace SEA_Application.Controllers
         }
         public ActionResult GetStudent(int ClassID)
         {
-            var List = new SelectList(db.AspNetStudents.Where(x => x.AspNetUser.Status != "False" && x.AspNetClass.Id == 89), "Id", "AspNetUser.Name");
+            var List = new SelectList(db.AspNetStudents.Where(x => x.AspNetUser.Status != "False" && x.AspNetStudent_Session_class.Any(y=> y.SessionID == SessionID && y.ClassID == ClassID) ), "Id", "AspNetUser.Name");
             // ViewBag.StudentID = new SelectList(db.AspNetStudents.Where(x => x.AspNetUser.Status != "False"  && x.AspNetClass.Id == 89), "Id", "AspNetUser.Name");
             string status = Newtonsoft.Json.JsonConvert.SerializeObject(List);
             return Content(status);
@@ -104,9 +106,9 @@ namespace SEA_Application.Controllers
                 return RedirectToAction("Index");
             }
 
-             ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetStudentPerformanceReport.SubjectID);
-            ViewBag.StudentID = new SelectList(db.AspNetUsers, "Id", "Email", aspNetStudentPerformanceReport.StudentID);
+             ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetStudentPerformanceReport.SubjectID);
+            ViewBag.StudentID = new SelectList(db.AspNetUsers.Where(x=> x.AspNetUsers_Session.Any(y=> y.SessionID == SessionID)), "Id", "Email", aspNetStudentPerformanceReport.StudentID);
             return View(aspNetStudentPerformanceReport);
         }
 
@@ -122,8 +124,8 @@ namespace SEA_Application.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetStudentPerformanceReport.SubjectID);
-            ViewBag.StudentID = new SelectList(db.AspNetUsers, "Id", "Name", aspNetStudentPerformanceReport.StudentID);
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetStudentPerformanceReport.SubjectID);
+            ViewBag.StudentID = new SelectList(db.AspNetUsers.Where(x=> x.AspNetUsers_Session.Any(y=> y.SessionID == SessionID)), "Id", "Name", aspNetStudentPerformanceReport.StudentID);
             return View(aspNetStudentPerformanceReport);
         }
 

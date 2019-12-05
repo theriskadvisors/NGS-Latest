@@ -257,17 +257,17 @@ namespace SEA_Application.Controllers
                     db.SaveChanges();
 
 
-                    var empdata = db.Aspnet_Employee_Session.OrderByDescending(x=>x.Emp_Id).FirstOrDefault().Id;
-                    var emp_data = db.AspNetEmployees.OrderByDescending(x => x.Id).FirstOrDefault().Id;
+                    //var empdata = db.Aspnet_Employee_Session.OrderByDescending(x=>x.Emp_Id).FirstOrDefault().Id;
+                    //var emp_data = db.AspNetEmployees.OrderByDescending(x => x.Id).FirstOrDefault().Id;
 
-                    int id = Int32.Parse(empdata);
-                    ++id;
-                    Aspnet_Employee_Session ES = new Aspnet_Employee_Session();
-                    ES.Session_Id = Int32.Parse("17");
-                    ES.Id = id.ToString();
-                    ES.Emp_Id = emp_data;
-                    db.Aspnet_Employee_Session.Add(ES);
-                    db.SaveChanges();
+                    //int id = Int32.Parse(empdata);
+                    //++id;
+                    //Aspnet_Employee_Session ES = new Aspnet_Employee_Session();
+                    //ES.Session_Id = Int32.Parse("17");
+                    //ES.Id = id.ToString();
+                    //ES.Emp_Id = emp_data;
+                    //db.Aspnet_Employee_Session.Add(ES);
+                    //db.SaveChanges();
                     TempData["sMessage"] = "Employee successfully saved.";
                     return RedirectToAction("Index", "AspNetEmployees");
                 }

@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetParentTeacherMeeting
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetParentTeacherMeeting()
         {
             this.AspNetPTMAttendances = new HashSet<AspNetPTMAttendance>();
@@ -28,6 +29,7 @@ namespace SEA_Application.Models
         public Nullable<int> SessionID { get; set; }
     
         public virtual AspNetSession AspNetSession { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetPTMAttendance> AspNetPTMAttendances { get; set; }
     }
 }

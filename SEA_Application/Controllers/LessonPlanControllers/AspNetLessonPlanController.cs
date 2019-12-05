@@ -15,6 +15,8 @@ namespace SEA_Application.Controllers.LessonPlanControllers
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
         private string TeacherID;
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
+
         public AspNetLessonPlanController()
         {
 
@@ -47,7 +49,7 @@ namespace SEA_Application.Controllers.LessonPlanControllers
         public ActionResult Create()
         {
             ViewBag.HeadingID = new SelectList(db.AspNetLessonPlanBreakdownHeadings, "Id", "BreakDownHeadingName");
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID ).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
             return View();
         }
@@ -56,7 +58,7 @@ namespace SEA_Application.Controllers.LessonPlanControllers
         {
             if (User.IsInRole("Teacher"))
             {
-                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.AspNetSession.Id == 17).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             }
             else
             {
@@ -80,8 +82,8 @@ namespace SEA_Application.Controllers.LessonPlanControllers
                 return RedirectToAction("Index");
             }
             ViewBag.HeadingID = new SelectList(db.AspNetLessonPlanBreakdownHeadings, "Id", "BreakDownHeadingName");
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetLessonPlan.SubjectID);
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetLessonPlan.SubjectID);
             return View(aspNetLessonPlan);
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,9 +94,7 @@ namespace SEA_Application.Controllers.LessonPlanControllers
         public JsonResult GetLessonPlanInfo(int id)
         {
             var LessonPlan = db.AspNetLessonPlans.FirstOrDefault(d => d.Id == id);
-
-
-
+            
             lessonPlan Info = new lessonPlan();
             Info.GetTopics = new List<string>();
             Info.BreakDown = new List<BreakDowns>();
@@ -119,12 +119,8 @@ namespace SEA_Application.Controllers.LessonPlanControllers
                 Info.BreakDown.Add(breakDown);
             }
 
-
             return Json(Info, JsonRequestBehavior.AllowGet);
         }
-
-
-
 
         public JsonResult GetLessonPlanID(int SubjectID, DateTime Date)
         {
@@ -144,8 +140,6 @@ namespace SEA_Application.Controllers.LessonPlanControllers
             ViewBag.ChapterID = new SelectList(db.AspNetChapters.Where(s => s.SubjectID == chapObj.SubjectID), "Id", "ChapterName");
             return View();
         }
-
-        
 
         public ActionResult EditLessonPlan(int? id)
         {

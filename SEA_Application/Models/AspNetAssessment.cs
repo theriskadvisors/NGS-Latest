@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetAssessment
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetAssessment()
         {
             this.AspNetAssessment_Topic = new HashSet<AspNetAssessment_Topic>();
@@ -33,8 +34,10 @@ namespace SEA_Application.Models
         public Nullable<int> SessionID { get; set; }
     
         public virtual AspNetSession AspNetSession { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetAssessment_Topic> AspNetAssessment_Topic { get; set; }
         public virtual AspNetSubject_Catalog AspNetSubject_Catalog { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetStudent_Assessment> AspNetStudent_Assessment { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetPTMFormRole
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetPTMFormRole()
         {
             this.AspNetFeedBackForms = new HashSet<AspNetFeedBackForm>();
@@ -22,6 +23,7 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public string RoleName { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetFeedBackForm> AspNetFeedBackForms { get; set; }
     }
 }

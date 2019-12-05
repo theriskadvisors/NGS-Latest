@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class Job
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Job()
         {
             this.JobParameters = new HashSet<JobParameter>();
@@ -28,7 +29,9 @@ namespace SEA_Application.Models
         public System.DateTime CreatedAt { get; set; }
         public Nullable<System.DateTime> ExpireAt { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JobParameter> JobParameters { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<State> States { get; set; }
     }
 }

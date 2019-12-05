@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetDurationType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetDurationType()
         {
             this.AspNetFeeChallans = new HashSet<AspNetFeeChallan>();
@@ -23,6 +24,7 @@ namespace SEA_Application.Models
         public string TypeName { get; set; }
         public Nullable<int> MonthsDuration { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetFeeChallan> AspNetFeeChallans { get; set; }
     }
 }

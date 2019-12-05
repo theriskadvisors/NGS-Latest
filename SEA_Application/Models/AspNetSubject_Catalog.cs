@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetSubject_Catalog
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetSubject_Catalog()
         {
             this.AspNetAssessments = new HashSet<AspNetAssessment>();
@@ -24,6 +25,7 @@ namespace SEA_Application.Models
         public Nullable<int> CatalogID { get; set; }
         public Nullable<int> Weightage { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetAssessment> AspNetAssessments { get; set; }
         public virtual AspNetCatalog AspNetCatalog { get; set; }
         public virtual AspNetSubject AspNetSubject { get; set; }

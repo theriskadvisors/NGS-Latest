@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetFeedBackForm
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetFeedBackForm()
         {
             this.AspNetPTM_ParentFeedback = new HashSet<AspNetPTM_ParentFeedback>();
@@ -27,7 +28,9 @@ namespace SEA_Application.Models
     
         public virtual AspNetSession AspNetSession { get; set; }
         public virtual AspNetPTMFormRole AspNetPTMFormRole { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetPTM_ParentFeedback> AspNetPTM_ParentFeedback { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetPTM_TeacherFeedback> AspNetPTM_TeacherFeedback { get; set; }
     }
 }

@@ -25,6 +25,8 @@ namespace SEA_Application.Controllers
         private ApplicationUserManager _userManager;
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
         private string TeacherID;
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
+
         public Teacher_DashboardController()
         {
 
@@ -259,7 +261,7 @@ namespace SEA_Application.Controllers
         }
         public ViewResult Teacher_Subject()
         {
-            var subjects = db.AspNetSubjects.Include(s => s.AspNetClass).Include(s => s.AspNetUser).Where(s => s.TeacherID == TeacherID);
+            var subjects = db.AspNetSubjects.Include(s => s.AspNetClass).Include(s => s.AspNetUser).Where(s => s.TeacherID == TeacherID && s.AspNetClass.AspNetSession.Id == SessionID );
             return View("_Teacher_Subject", subjects);
         }
 
@@ -356,19 +358,19 @@ namespace SEA_Application.Controllers
         {
             if (User.IsInRole("Teacher"))
             {
-                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.AspNetSession.Id == 17).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.AspNetSession.Id == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             }
             else
             {
-                ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+                ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
             }
             return View("_Teacher_Announcement");
         }
 
         public ViewResult Attendance()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             return View("_Attendance");
         }
         public ActionResult View_Attendance()
@@ -388,7 +390,7 @@ namespace SEA_Application.Controllers
 
         public ViewResult Topics()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             return View("_Topics");
         }
 
@@ -435,8 +437,8 @@ namespace SEA_Application.Controllers
 
         public ViewResult Class_Assessment()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
-
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+          
             //ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.TeacherID == TeacherID), "Id", "ClassName");
             //ViewBag.ClassID = new SelectList((from c in db.AspNetClasses
             //                                  join s in db.AspNetSubjects
@@ -444,9 +446,8 @@ namespace SEA_Application.Controllers
             //                                  where c.TeacherID == TeacherID
             //                                  select new { s.ClassID, c.ClassName }).Distinct(), "Id", "ClassName");
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
-            var sessiionid = db.AspNetSessions.Where(p => p.Status == "Active").FirstOrDefault().Id;
-            ViewBag.TermID = new SelectList(db.AspNetTerms.Where(x => x.SessionID == sessiionid), "Id", "TermName", "TermNo");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
+            ViewBag.TermID = new SelectList(db.AspNetTerms.Where(x => x.SessionID == SessionID), "Id", "TermName", "TermNo");
             //ViewBag.TermId = new SelectList(db.AspNetTerms.Where(p => p.))
             return View("_ClassAssessment");
         }

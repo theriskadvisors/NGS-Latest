@@ -186,7 +186,7 @@
 
 
     function SubjectsByClassID(ClassIDVal) {
-        @*$.get('@Url.Action("SubjectsByClass")',
+        $.get('@Url.Action("SubjectsByClass")',
             { id: ClassIDVal }, function (data) {
                 //alert(JSON.stringify(data));
                 $('#Subjects').html('');
@@ -195,23 +195,18 @@
                     $('#Subjects').append('<option value=' + item.Id + '>' + item.SubjectName + '</option>');
                 });
 
-            });*@
-        debugger;
-        $.get("/Teacher_Dashboard/SubjectsByClass?id=89", function (data, status) {
-            debugger;
-            $('#Subjects').html('');
-            $('#Subjects').prop('disabled', false);
-            $.each(data, function (i, item) {
-                $('#Subjects').append('<option value=' + item.Id + '>' + item.SubjectName + '</option>');
             });
+       
+        //$.get("/Teacher_Dashboard/SubjectsByClass?id=" + ClassIDVal, function (data, status) {
+        //    debugger;
+        //    $('#Subjects').html('');
+        //    $('#Subjects').prop('disabled', false);
+        //    $.each(data, function (i, item) {
+        //        $('#Subjects').append('<option value=' + item.Id + '>' + item.SubjectName + '</option>');
+        //    });
 
-        });
+        //});
     }
-
-
-
-
-
 
     function sub_click() {
         var selectedSubject = $("#Subjects").val();

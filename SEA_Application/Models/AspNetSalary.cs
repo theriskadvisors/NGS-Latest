@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetSalary
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetSalary()
         {
             this.AspNetSalaryDetails = new HashSet<AspNetSalaryDetail>();
@@ -28,6 +29,7 @@ namespace SEA_Application.Models
     
         public virtual AspNetSession AspNetSession { get; set; }
         public virtual AspNetVirtualRole AspNetVirtualRole { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetSalaryDetail> AspNetSalaryDetails { get; set; }
     }
 }

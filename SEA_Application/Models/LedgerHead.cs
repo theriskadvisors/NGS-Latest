@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class LedgerHead
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public LedgerHead()
         {
             this.Ledgers = new HashSet<Ledger>();
@@ -23,7 +24,9 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public string Name { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ledger> Ledgers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LedgerGroup> LedgerGroups { get; set; }
     }
 }

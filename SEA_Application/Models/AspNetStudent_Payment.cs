@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetStudent_Payment
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetStudent_Payment()
         {
             this.AspNetStudent_PaymentDetail = new HashSet<AspNetStudent_PaymentDetail>();
@@ -31,7 +32,9 @@ namespace SEA_Application.Models
     
         public virtual AspNetFeeChallan AspNetFeeChallan { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetStudent_PaymentDetail> AspNetStudent_PaymentDetail { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetStudent_PaymentDetail> AspNetStudent_PaymentDetail1 { get; set; }
     }
 }

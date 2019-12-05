@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetTerm
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetTerm()
         {
             this.AspNetStudent_Term_Assessment = new HashSet<AspNetStudent_Term_Assessment>();
@@ -28,6 +29,7 @@ namespace SEA_Application.Models
         public Nullable<int> TermNo { get; set; }
     
         public virtual AspNetSession AspNetSession { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetStudent_Term_Assessment> AspNetStudent_Term_Assessment { get; set; }
     }
 }

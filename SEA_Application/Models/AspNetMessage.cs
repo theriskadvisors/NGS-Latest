@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetMessage
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetMessage()
         {
             this.AspNetMessage_Receiver = new HashSet<AspNetMessage_Receiver>();
@@ -28,6 +29,7 @@ namespace SEA_Application.Models
         public Nullable<bool> IsText { get; set; }
         public Nullable<int> SessionID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetMessage_Receiver> AspNetMessage_Receiver { get; set; }
         public virtual AspNetSession AspNetSession { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }

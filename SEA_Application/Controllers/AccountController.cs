@@ -32,7 +32,7 @@ namespace SEA_Application.Controllers
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
-            var abc = 0;
+            //var abc = 0;
             UserManager = userManager;
             SignInManager = signInManager;
         }

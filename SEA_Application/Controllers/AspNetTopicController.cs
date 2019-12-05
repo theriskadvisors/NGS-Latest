@@ -15,7 +15,7 @@ namespace SEA_Application.Controllers
     public class AspNetTopicController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
-
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         string TeacherID;
 
 
@@ -50,8 +50,8 @@ namespace SEA_Application.Controllers
         // GET: AspNetTopic/Create
         public ActionResult Create()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
-            ViewBag.ChapterID = new SelectList(db.AspNetChapters, "Id", "ChapterName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.ChapterID = new SelectList(db.AspNetChapters.Where(x=> x.AspNetSubject.AspNetClass.SessionID == SessionID), "Id", "ChapterName");
             return View();
         }
 
@@ -95,15 +95,11 @@ namespace SEA_Application.Controllers
             catch (Exception)
             {
                 dbTransaction.Dispose();
-                ViewBag.ChapterID = new SelectList(db.AspNetChapters, "Id", "ChapterName", aspNetTopic.ChapterID);
+                ViewBag.ChapterID = new SelectList(db.AspNetChapters.Where(x=> x.AspNetSubject.AspNetClass.SessionID == SessionID), "Id", "ChapterName", aspNetTopic.ChapterID);
                 return View(aspNetTopic);
             }
             
-
-            
-        
-
-            ViewBag.ChapterID = new SelectList(db.AspNetChapters, "Id", "ChapterName", aspNetTopic.ChapterID);
+            ViewBag.ChapterID = new SelectList(db.AspNetChapters.Where(x => x.AspNetSubject.AspNetClass.SessionID == SessionID), "Id", "ChapterName", aspNetTopic.ChapterID);
             return View(aspNetTopic);
         }
 
@@ -463,7 +459,7 @@ namespace SEA_Application.Controllers
                 }
             }
 
-            var LessonPlans = db.AspNetLessonPlans.Select(x => x).ToList();
+            var LessonPlans = db.AspNetLessonPlans.Where(x=> x.AspNetSubject.Id == id).Select(x => x).ToList();
             foreach(var lessonplan in LessonPlans)
             {
                 calendarEvents lessonplanevent = new calendarEvents();

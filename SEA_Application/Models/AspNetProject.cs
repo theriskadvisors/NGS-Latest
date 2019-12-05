@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetProject
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetProject()
         {
             this.AspNetStudent_Project = new HashSet<AspNetStudent_Project>();
@@ -29,6 +30,7 @@ namespace SEA_Application.Models
         public Nullable<int> SubjectID { get; set; }
     
         public virtual AspNetSubject AspNetSubject { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetStudent_Project> AspNetStudent_Project { get; set; }
     }
 }

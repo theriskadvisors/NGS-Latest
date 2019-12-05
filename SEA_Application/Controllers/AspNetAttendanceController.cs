@@ -250,7 +250,8 @@ namespace SEA_Application.Controllers
             }//// Second Phase
             else
             {
-                int ClassID = Convert.ToInt32(subjectID);
+                var Class = Int32.Parse(subjectID.Substring(1));
+                var ClassID = db.AspNetSubjects.Where(x => x.ClassID == Class).FirstOrDefault().ClassID;
                 var date = DateTime.Now.Date;
                 var sub = db.AspNetSubjects.Where(x => x.ClassID == ClassID).Select(x=>x.Id).ToList();
                 var Attendance = db.AspNetAttendances.Where(x => x.Date == date && sub.Contains(x.SubjectID)).FirstOrDefault();

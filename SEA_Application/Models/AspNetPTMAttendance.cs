@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetPTMAttendance
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetPTMAttendance()
         {
             this.AspNetPTM_ParentFeedback = new HashSet<AspNetPTM_ParentFeedback>();
@@ -28,7 +29,9 @@ namespace SEA_Application.Models
         public Nullable<int> Rating { get; set; }
     
         public virtual AspNetParentTeacherMeeting AspNetParentTeacherMeeting { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetPTM_ParentFeedback> AspNetPTM_ParentFeedback { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetPTM_TeacherFeedback> AspNetPTM_TeacherFeedback { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual AspNetSubject AspNetSubject { get; set; }

@@ -17,7 +17,9 @@ namespace SEA_Application.Controllers
     public class AspNetProjectController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         private string TeacherID;
+
         public AspNetProjectController()
         {
 
@@ -28,21 +30,21 @@ namespace SEA_Application.Controllers
         {
             if (User.IsInRole("Teacher"))
             {
-                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.AspNetSession.Id == 17).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+                ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.AspNetSession.Id == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             }
             else
             {
-                ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+                ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
             }
             
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             return View();
         }
 
         public ViewResult Project_Submission()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             
             return View();
         }
@@ -67,8 +69,8 @@ namespace SEA_Application.Controllers
         // GET: AspNetProject/Create
         public ActionResult Create()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             return View();
         }
 
@@ -217,8 +219,8 @@ namespace SEA_Application.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetProject.SubjectID);
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetProject.SubjectID);
             return View(aspNetProject);
         }
 

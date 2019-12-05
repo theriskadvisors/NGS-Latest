@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetAnnouncement
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetAnnouncement()
         {
             this.AspNetAnnouncement_Subject = new HashSet<AspNetAnnouncement_Subject>();
@@ -26,10 +27,12 @@ namespace SEA_Application.Models
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> SessionID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetAnnouncement_Subject> AspNetAnnouncement_Subject { get; set; }
         public virtual AspNetAnnouncement AspNetAnnouncement1 { get; set; }
         public virtual AspNetAnnouncement AspNetAnnouncement2 { get; set; }
         public virtual AspNetSession AspNetSession { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetStudent_Announcement> AspNetStudent_Announcement { get; set; }
     }
 }

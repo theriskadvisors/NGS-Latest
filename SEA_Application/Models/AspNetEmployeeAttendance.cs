@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetEmployeeAttendance
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetEmployeeAttendance()
         {
             this.AspNetEmployee_Attendance = new HashSet<AspNetEmployee_Attendance>();
@@ -22,6 +23,7 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetEmployee_Attendance> AspNetEmployee_Attendance { get; set; }
     }
 }

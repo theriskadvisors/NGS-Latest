@@ -752,12 +752,6 @@
     <Compile Include="Models\Set.cs">
       <DependentUpon>SEA_Database.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>SEA_Database.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>SEA_Database.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\State.cs">
       <DependentUpon>SEA_Database.tt</DependentUpon>
     </Compile>
@@ -782,9 +776,6 @@
       <DependentUpon>SEA_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Student_ChallanForm.cs">
-      <DependentUpon>SEA_Database.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>SEA_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TeacherPenaltyRecord.cs">

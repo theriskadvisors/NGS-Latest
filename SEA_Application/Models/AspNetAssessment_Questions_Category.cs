@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetAssessment_Questions_Category
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetAssessment_Questions_Category()
         {
             this.AspNetAssessment_Question = new HashSet<AspNetAssessment_Question>();
@@ -22,6 +23,7 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public string CategoryName { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetAssessment_Question> AspNetAssessment_Question { get; set; }
     }
 }
