@@ -18,7 +18,7 @@ namespace SEA_Application.Controllers
     public class AspNetEmployeesController :  Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
-
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         // GET: AspNetEmployees
         public ActionResult Index()
         {
@@ -27,7 +27,7 @@ namespace SEA_Application.Controllers
                 ViewBag.Message = TempData["sMessage"].ToString();
             }
             
-          return View(db.AspNetEmployees.Where(x => x.Aspnet_Employee_Session.Select(y => y.Session_Id.ToString()).Contains("17")).ToList());
+          return View(db.AspNetEmployees.Where(x => x.Aspnet_Employee_Session.Select(y => y.Session_Id).Contains(SessionID)).ToList());
            
         }
 
@@ -94,7 +94,8 @@ namespace SEA_Application.Controllers
                 db.SaveChanges();
 
                 Aspnet_Employee_Session ES = new Aspnet_Employee_Session();
-                ES.Session_Id =Int32.Parse("17");
+               int sessionid =  db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+               ES.Session_Id = sessionid;
                 ES.Emp_Id = aspNetEmployee.Id;
                 db.Aspnet_Employee_Session.Add(ES);
                 db.SaveChanges();
@@ -254,20 +255,15 @@ namespace SEA_Application.Controllers
                 try
                 {
                     db.AspNetEmployees.Add(emp);
-                    db.SaveChanges();
+                    if (db.SaveChanges() > 0)
+                    {
 
-
-                    var empdata = db.Aspnet_Employee_Session.OrderByDescending(x=>x.Emp_Id).FirstOrDefault().Id;
-                    var emp_data = db.AspNetEmployees.OrderByDescending(x => x.Id).FirstOrDefault().Id;
-
-                    int id = Int32.Parse(empdata);
-                    ++id;
-                    Aspnet_Employee_Session ES = new Aspnet_Employee_Session();
-                    ES.Session_Id = Int32.Parse("17");
-                    ES.Id = id.ToString();
-                    ES.Emp_Id = emp_data;
-                    db.Aspnet_Employee_Session.Add(ES);
-                    db.SaveChanges();
+                        Aspnet_Employee_Session ES = new Aspnet_Employee_Session();
+                        ES.Session_Id = SessionID;
+                        ES.Emp_Id = emp.Id;
+                        db.Aspnet_Employee_Session.Add(ES);
+                        db.SaveChanges();
+                    }
                     TempData["sMessage"] = "Employee successfully saved.";
                     return RedirectToAction("Index", "AspNetEmployees");
                 }

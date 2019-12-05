@@ -25,6 +25,7 @@ namespace SEA_Application.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+          int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         // GET: Admin_Dashboard
         public ActionResult Index()
         {
@@ -1055,7 +1056,7 @@ namespace SEA_Application.Controllers
                     db.SaveChanges();
                     AspNetUsers_Session US = new AspNetUsers_Session();
                     US.UserID = emp.UserId;
-                    US.SessionID =  Int32.Parse("17");
+                    US.SessionID = SessionID;
                     db.AspNetUsers_Session.Add(US);
                     db.SaveChanges();
 
@@ -1194,7 +1195,9 @@ namespace SEA_Application.Controllers
 
         public ActionResult ParentRegister()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+        //    ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName");
             return View();
         }
 
@@ -1218,7 +1221,7 @@ namespace SEA_Application.Controllers
                 msg.Bcc.Add(bccMail);
                 SmtpClient client = new SmtpClient();
                 client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential("talhaghaffar98@gmail.com", "Parado9211");
+                client.Credentials = new System.Net.NetworkCredential("talhaghaffar98@gmail.com", "Orion@123");
                 client.Port = 25; // You can use Port 25 if 587 is blocked (mine is!)
                 client.Host = "smtp.gmail.com";
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -1300,13 +1303,7 @@ public ActionResult ConfirmAccount(string id)
                     IEnumerable<string> selectedstudents = Request.Form["StudentID"].Split(',');
                     var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Name = model.Name, PhoneNumber = Request.Form["fatherCell"] };
                     //                    SendConformationEmail(user);
-                    AspNetUsers_Session US = new AspNetUsers_Session();
-                    US.UserID = User.Identity.GetUserId();
-                    US.SessionID = Int32.Parse("17");
-                    db.AspNetUsers_Session.Add(US);
-                    db.SaveChanges();
-
-
+                  
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
@@ -1324,6 +1321,11 @@ public ActionResult ConfirmAccount(string id)
                         parent.UserID = user.Id;
                         db.AspNetParents.Add(parent);
 
+                        AspNetUsers_Session US = new AspNetUsers_Session();
+                        US.UserID = user.Id;
+                        US.SessionID = SessionID;
+                        db.AspNetUsers_Session.Add(US);
+                        db.SaveChanges();
                         
                         foreach (var item in selectedstudents)
                         {
@@ -1627,11 +1629,20 @@ public ActionResult ConfirmAccount(string id)
                     db.AspNetEmployees.Add(emp);
                     db.SaveChanges();
                   
-                       AspNetUsers_Session US = new AspNetUsers_Session();
+                    AspNetUsers_Session US = new AspNetUsers_Session();
                     US.UserID = emp.UserId;
-                    US.SessionID = Int32.Parse("17");
+                    int sessionid = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+                    US.SessionID = sessionid;
                     db.AspNetUsers_Session.Add(US);
-                    db.SaveChanges();
+                    if(db.SaveChanges()>0)
+                    {
+                        Aspnet_Employee_Session aes = new Aspnet_Employee_Session();
+                        aes.Emp_Id = emp.Id;
+                        aes.Session_Id = sessionid;
+                        db.Aspnet_Employee_Session.Add(aes);
+                        db.SaveChanges();
+                    }
+
                     string Error = "Teacher successfully saved.";
                     return RedirectToAction("TeacherIndex", "AspNetUser", new { Error });
                 }
@@ -1750,7 +1761,8 @@ public ActionResult ConfirmAccount(string id)
         public ActionResult StudentRegister()
         {
             //var data = db.AspNetClasses 
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+           // ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+           ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName");
             return View();
         }
 
@@ -1781,6 +1793,24 @@ public ActionResult ConfirmAccount(string id)
                         student.ClassID = Convert.ToInt32(Request.Form["ClassID"]);
                         db.AspNetStudents.Add(student);
                         db.SaveChanges();
+
+                        AspNetStudent_Session_class asc = new AspNetStudent_Session_class();
+                        asc.ClassID = student.ClassID;
+                        Aspnet_Employee_Session ES = new Aspnet_Employee_Session();
+                        int sessionid = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+                        asc.SessionID = sessionid;
+                        asc.StudentID =   student.Id;
+                        db.AspNetStudent_Session_class.Add(asc);
+                        if (db.SaveChanges() > 0)
+                        {
+
+                            AspNetUsers_Session AS = new AspNetUsers_Session();
+                            AS.UserID = student.StudentID;
+                            AS.SessionID = sessionid;
+                            db.AspNetUsers_Session.Add(AS);
+                            db.SaveChanges();
+                        }
+
 
                         foreach (var item in selectedsubjects)
                         {

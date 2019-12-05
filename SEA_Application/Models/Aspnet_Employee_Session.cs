@@ -14,9 +14,9 @@ namespace SEA_Application.Models
     
     public partial class Aspnet_Employee_Session
     {
-        public string Id { get; set; }
         public Nullable<int> Emp_Id { get; set; }
         public Nullable<int> Session_Id { get; set; }
+        public int Id { get; set; }
     
         public virtual AspNetEmployee AspNetEmployee { get; set; }
         public virtual AspNetSession AspNetSession { get; set; }
