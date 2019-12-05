@@ -125,7 +125,8 @@
 
         });
 
-        $("#ClassID").click(function () {
+        $("#ClassID").change(function () {
+         
             var selectedClass = $("#ClassID").val();
             $.get('@Url.Action("SubjectsByClass")',
                 { id: selectedClass }, function (data) {

@@ -28,7 +28,7 @@ namespace SEA_Application.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
-
+         int SessionID =  Int32.Parse(SessionIDStaticController.GlobalSessionID);
         public AspNetUserController()
         {
 
@@ -121,6 +121,8 @@ namespace SEA_Application.Controllers
             {
                 var Students = (from parent in db.AspNetParent_Child
                                 join student in db.AspNetStudents on parent.ChildID equals student.StudentID
+                                join session in db.AspNetUsers_Session on parent.ChildID equals session.AspNetUser.Id
+                                where session.SessionID == SessionID
                                 select new { parent.AspNetUser1.Name, parent.AspNetUser1.UserName, parent.AspNetUser1.Email, childName = parent.AspNetUser.Name }).Distinct().ToList();
 
 
@@ -176,7 +178,7 @@ namespace SEA_Application.Controllers
 
             if (id == 0)
             {
-                var Students = db.AspNetStudents.Where(x => x.AspNetUser.Status != "False").Select(x => new
+                var Students = db.AspNetStudents.Where(x => x.AspNetUser.Status != "False" && x.AspNetStudent_Session_class.Any(z=> z.SessionID == SessionID)).Select(x => new
                 {
                     x.AspNetUser.Name,
                     x.AspNetUser.Email,
@@ -281,7 +283,7 @@ namespace SEA_Application.Controllers
         public JsonResult AllTeachers()
         {
 
-            var teachers = (from teacher in db.AspNetUsers.Where(x => x.Status != "False") join t2 in db.AspNetUsers_Session.Where(s=>s.SessionID == 17)
+            var teachers = (from teacher in db.AspNetUsers.Where(x => x.Status != "False") join t2 in db.AspNetUsers_Session.Where(s=>s.SessionID == SessionID)
                             on teacher.Id  equals t2.UserID
                             where teacher.AspNetRoles.Select(y => y.Name).Contains("Teacher")
                             select new
@@ -330,7 +332,7 @@ namespace SEA_Application.Controllers
                 var parent = new parent();
                 // var parentuser = db.AspNetUsers.Where(x => x.Id == item.ParentID & x.Status != "False").Select(x => x).FirstOrDefault();
              //   var parentuser = db.AspNetUsers.Where(x => x.Id == item.ParentID & x.Status != "False").Select(x => x).FirstOrDefault();
-                var parentuser = (from usr in db.AspNetUsers.Where(x => x.Id == item.ParentID & x.Status != "False") join t2 in db.AspNetUsers_Session.Where(x=>x.SessionID == 17) on usr.Id equals t2.UserID select usr).FirstOrDefault();
+                var parentuser = (from usr in db.AspNetUsers.Where(x => x.Id == item.ParentID & x.Status != "False") join t2 in db.AspNetUsers_Session.Where(x=>x.SessionID == SessionID) on usr.Id equals t2.UserID select usr).FirstOrDefault();
                 try
                 {
                     parent.Id = parentuser.Id;
@@ -678,14 +680,19 @@ namespace SEA_Application.Controllers
             //}
 
 
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+           // ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName");
             return View();
         }
 
         public JsonResult AllStudents()
         {
-            var students =(from std in  db.AspNetStudents.Where(x => x.AspNetUser.Status != "False") join t2 in 
-                         db.AspNetStudent_Session_class.Where(x=>x.SessionID == 18) on std.Id equals t2.StudentID
+
+            
+           
+            var students =(from std in  db.AspNetStudents.Where(x => x.AspNetUser.Status != "False") join t2 in
+                               db.AspNetStudent_Session_class.Where(x => x.SessionID == SessionID) on std.Id equals t2.StudentID
                           select new {
                               
                 std.AspNetUser.Name,
@@ -702,8 +709,9 @@ namespace SEA_Application.Controllers
 
         public ViewResult StudentIndex(string Error)
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+           // ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
 
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName");
             ViewBag.Error = Error;
             return View("StudentsIndex");
         }
@@ -735,13 +743,11 @@ namespace SEA_Application.Controllers
         {
             ViewBag.data = "Accountant";
             //  db.AspNetEmployees.Where(x => x.Aspnet_Employee_Session.Select(y => y.Session_Id.ToString()).Contains(GetSessionID)).ToList();
-           
-        //var data =  db.GetAccountantListingData("17").ToList(); 
+            //var data =  db.GetAccountantListingData("17").ToList(); 
             var data2 = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Accountant") && x.Status != "False").ToList();
-          var rr =   db.GetAccountantListingData("17").ToList();
+            var rr =   db.GetAccountantListingData(SessionID.ToString()).ToList();
             List<GetAccountantListingData_Result> list = new List<GetAccountantListingData_Result>();
             
-        
             return View("Index", db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Accountant") && x.Status != "False").ToList());
         }
 
@@ -749,9 +755,9 @@ namespace SEA_Application.Controllers
         {
             string Status = "error";
             var data2 = db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Accountant") && x.Status != "False").ToList();
-            var rr = db.GetAccountantListingData("17").ToList();
+            var rr = db.GetAccountantListingData(SessionID.ToString()).ToList();
             List<GetAccountantListingData_Result> list = new List<GetAccountantListingData_Result>();
-            list = db.GetAccountantListingData("17").ToList();
+            list = db.GetAccountantListingData(SessionID.ToString()).ToList();
             Status = JsonConvert.SerializeObject(list);
 
             return Content(Status);
@@ -818,7 +824,9 @@ namespace SEA_Application.Controllers
 
         public ViewResult ParentIndex()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+          //  ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName");
             ViewBag.data = "Parent";
 
             return View(db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Parent") && x.Status != "False").ToList());
@@ -1119,13 +1127,15 @@ namespace SEA_Application.Controllers
 
         public ViewResult TeachersIndex()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            //ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x => x.SessionID == SessionID), "Id", "ClassName");
+            
             return View();
         }
 
         public ViewResult TeacherIndex(string Error)
         {
-            ViewBag.ClassID = new SelectList(db.AspNetClasses, "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=>x.SessionID == SessionID), "Id", "ClassName");
             ViewBag.Error = Error;
             return View("TeachersIndex");
         }
