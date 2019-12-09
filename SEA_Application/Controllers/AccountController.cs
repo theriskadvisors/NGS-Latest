@@ -458,6 +458,12 @@ namespace SEA_Application.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
+                    ViewBag.SessionID = db.AspNetSessions.ToList().Select(x => new SelectListItem
+                    {
+                        Value = x.Id.ToString(),
+                        Text = x.SessionName,
+                        Selected = (x.Status == "Active")
+                    });
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
