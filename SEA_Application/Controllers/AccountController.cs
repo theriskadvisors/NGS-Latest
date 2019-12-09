@@ -386,6 +386,15 @@ namespace SEA_Application.Controllers
                     {
                         AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                         // return RedirectToAction("Index", "Home");
+                        SessionIDStaticController.GlobalSessionID = model.SessionID;
+
+
+            ViewBag.SessionID = db.AspNetSessions.ToList().Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = x.SessionName,
+                Selected = (x.Status == "Active")
+            });
                         ModelState.AddModelError("", "Admin has disabled your account.");
                         return View(model);
                     }
