@@ -105,6 +105,20 @@ namespace SEA_Application.Controllers
         }
 
         // GET: AspNetSession/Edit/5
+
+            public ActionResult CheckStatus(string status)
+            {
+            string status1 = "error";
+            if (status == "Active")
+            {
+                if(db.AspNetSessions.Where(x => x.Status == "Active").Count() == 0)
+                {
+                    status1 = "success";
+                }
+            
+            }
+              return  Content(status1);
+            }
         public ActionResult Edit(int? id)
         {
             if (id == null)
