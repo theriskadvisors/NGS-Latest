@@ -23,7 +23,7 @@
         });
 
         $('#SubjectID').prop('disabled', true);
-        $("#ClassID").click(function () {
+        $("#ClassID").change(function () {
             var selectedClass = $("#ClassID").val();
             $.get('@Url.Action("SubjectsByClass","AspNetTopic")',
                 { id: selectedClass }, function (data) {

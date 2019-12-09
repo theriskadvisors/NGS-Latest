@@ -13,11 +13,12 @@ namespace SEA_Application.Controllers
     public class AspNetPTMFormRoleController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         // GET: AspNetPTMFormRole
         public ActionResult Index()
         {
-            return View(db.AspNetPTMFormRoles.ToList());
+            return View(db.AspNetPTMFormRoles.Where(x=> x.AspNetFeedBackForms.Any(y=> y.SessionID == SessionID )).ToList());
         }
 
         // GET: AspNetPTMFormRole/Details/5

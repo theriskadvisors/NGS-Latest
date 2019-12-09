@@ -15,11 +15,12 @@ namespace SEA_Application.Controllers
     public class AspNetParentTeacherMeetingsController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         // GET: AspNetParentTeacherMeetings
         public ActionResult Index()
         {
-            return View(db.AspNetParentTeacherMeetings.ToList());
+            return View(db.AspNetParentTeacherMeetings.Where(x=> x.SessionID == SessionID) .ToList());
         }
 
         public bool CheckPTM()
@@ -74,13 +75,16 @@ namespace SEA_Application.Controllers
                 var transactionObj = db.Database.BeginTransaction();
                 try
                 {
+                    var Session = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+                    aspNetParentTeacherMeeting.SessionID = Session;
+                        
                     db.AspNetParentTeacherMeetings.Add(aspNetParentTeacherMeeting);
                     db.SaveChanges();
                     int MeetingID = db.AspNetParentTeacherMeetings.Max(x => x.Id);
-                    List<int> SubjectIDs = db.AspNetSubjects.Select(x => x.Id).ToList();
+                    List<int> SubjectIDs = db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == Session).Select(x => x.Id).ToList();
                     var parentSubject = (from parentchild in db.AspNetParent_Child
                                          join studentsubject in db.AspNetStudent_Subject on parentchild.ChildID equals studentsubject.StudentID
-                                         where SubjectIDs.Contains(studentsubject.SubjectID)
+                                         where SubjectIDs.Contains(studentsubject.SubjectID) 
                                          select new { parentchild.ParentID, studentsubject.SubjectID }).ToList();
                     foreach (var parentsubject in parentSubject)
                     {
@@ -94,7 +98,7 @@ namespace SEA_Application.Controllers
                         db.SaveChanges();
 
                         int PTMAttendaceID = db.AspNetPTMAttendances.Max(x => x.Id);
-                        List<int> ParentQuestionIDs = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Parent").Select(x => x.Id).ToList();
+                        List<int> ParentQuestionIDs = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Parent" && x.SessionID == Session).Select(x => x.Id).ToList();
                         foreach (var questionID in ParentQuestionIDs)
                         {
                             AspNetPTM_ParentFeedback PTM_ParentFeedback = new AspNetPTM_ParentFeedback();
@@ -103,7 +107,7 @@ namespace SEA_Application.Controllers
                             db.AspNetPTM_ParentFeedback.Add(PTM_ParentFeedback);
                             db.SaveChanges();
                         }
-                        List<int> TeacherQuestionIDs = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Teacher").Select(x => x.Id).ToList();
+                        List<int> TeacherQuestionIDs = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Teacher" && x.SessionID == Session).Select(x => x.Id).ToList();
                         foreach (var questionID in TeacherQuestionIDs)
                         {
                             AspNetPTM_TeacherFeedback PTM_TeacherFeedback = new AspNetPTM_TeacherFeedback();
@@ -123,11 +127,12 @@ namespace SEA_Application.Controllers
                     NotificationObj.Subject = aspNetParentTeacherMeeting.Title;
                     NotificationObj.SenderID = User.Identity.GetUserId();
                     NotificationObj.Time = DateTime.Now;
+                    NotificationObj.SessionID = Session;
                     db.AspNetNotifications.Add(NotificationObj);
                             db.SaveChanges();
 
                     var NotificationID = db.AspNetNotifications.Max(x => x.Id);
-                    var receiverId = (from teacher in db.AspNetUsers.Where(x => x.Status != "False")
+                    var receiverId = (from teacher in db.AspNetUsers.Where(x => x.Status != "False" && x.AspNetUsers_Session.Any(y=> y.SessionID == Session))
                                       where teacher.AspNetRoles.Select(y => y.Name).Contains("Teacher") ||
                                             teacher.AspNetRoles.Select(y => y.Name).Contains("Student") ||
                                             teacher.AspNetRoles.Select(y => y.Name).Contains("Parent")

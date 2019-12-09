@@ -7,6 +7,9 @@
 <script src="~/AdminLTE/selectone.js"></script>
 
 <script>
+
+  
+
     $(document).ready(function () {
         
         $("#ClassID").prop('required', true);
@@ -26,8 +29,66 @@
         $("#Regularity").prop('required', true);
         $("#Assessment").prop('required', true);
 
-        $("#ClassID").click(function () {
+        $("#ClassID").change(function () {
+            debugger;
             var selectedClass = $("#ClassID").val();
+
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "/AspNetStudentPerformanceReport/GetSubjects?ClassID=" + selectedClass,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    
+                    var sch = JSON.parse(data);
+                    var $el = $(".SubjectIdDDL");
+                    $el.empty();
+                    if (sch.length > 0) {
+                        $el.append($("<option></option>")
+                                     .attr("value", 0).text('Select Subject'));
+                        for (i = 0; i < sch.length; i++) {
+                            $el.append($("<option></option>")
+                                    .attr("value", sch[i].Value).text(sch[i].Text));
+                        }
+                    }
+                    else {
+                        $el.append($("<option></option>")
+                                   .attr("value", '').text('Select'));
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "/AspNetStudentPerformanceReport/GetStudent?ClassID=" + selectedClass,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    debugger;
+                    var sch = JSON.parse(data);
+                    debugger;
+                    var $el = $(".StudentIdDDL");
+                    $el.empty();
+                    if (sch.length > 0) {
+                        $el.append($("<option></option>")
+                                     .attr("value", 0).text('Select Student'));
+                        for (i = 0; i < sch.length; i++) {
+                            $el.append($("<option></option>")
+                                    .attr("value", sch[i].Value).text(sch[i].Text));
+                        }
+                    }
+                    else {
+                        $el.append($("<option></option>")
+                                   .attr("value", '').text('Select'));
+                    }
+                }
+            });
+
+
+
+
             $.get('@Url.Action("SubjectsByClass", "Teacher_Dashboard")',
                 { id: selectedClass }, function (data) {
 
@@ -74,23 +135,37 @@
                 <div class="form-group">
                     <label class="control-label col-md-1 col-lg-1">Select Class:</label>
                     <div class="col-md-10">
-                        @Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control ClassID", @id = "ClassID" })
                     </div>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <label class="control-label col-md-1 col-lg-1">Subject Name:</label>
                     <div class="col-md-10">
                         @Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
                     </div>
-                </div>
+                </div>*@
                 <div class="form-group">
+                    <label class="control-label col-md-1 col-lg-1">Subject Name:</label>
+                    <div class="col-md-10">
+                        <select class="form-control SubjectIdDDL" id="SubjectId" name="SubjectId"></select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-1 col-lg-1">Student Name:</label>
+                    <div class="col-md-10">
+                        <select class="form-control StudentIdDDL" id="StudentId" name="StudentId"></select>
+                    </div>
+                </div>
+                @*<div class="form-group">
                     <label class="control-label col-md-1 col-lg-1">Student Name:</label>
                     <div class="col-md-10">
                         @Html.DropDownList("StudentID", null, htmlAttributes: new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.StudentID, "", new { @class = "text-danger" })
                     </div>
-                </div>
+                </div>*@
 
                 <div class="form-group">
                     <label class="control-label col-md-1 col-lg-1">Title:</label>

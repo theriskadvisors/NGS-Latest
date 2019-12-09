@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class EmployeePenaltyType
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public EmployeePenaltyType()
         {
             this.EmployeePenalties = new HashSet<EmployeePenalty>();
@@ -24,6 +25,7 @@ namespace SEA_Application.Models
         public Nullable<double> Amount { get; set; }
         public Nullable<System.DateTime> TimeStamp { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmployeePenalty> EmployeePenalties { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d69a85db679040c98bb445b1e7215ab5" Name="Diagram1">
+      <Diagram DiagramId="4b6483fdde6e43b2946a0c8517c9f099" Name="Diagram1">
         <EntityTypeShape EntityType="NGS_DatabaseModel.Aspnet_Employee_Session" Width="1.5" PointX="16.5" PointY="99.75" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.AspNetAbsent_Student" Width="1.5" PointX="11.25" PointY="65.875" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.AspNetAnnouncement" Width="1.5" PointX="3" PointY="87.25" IsExpanded="true" />
@@ -113,21 +113,20 @@
         <EntityTypeShape EntityType="NGS_DatabaseModel.StudentPenalty" Width="1.5" PointX="28.75" PointY="100.5" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.StudentPenaltyType" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.StudentRecurringFee" Width="1.5" PointX="7.5" PointY="82.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.sysdiagram" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.TeacherPenaltyRecord" Width="1.5" PointX="19.5" PointY="86.125" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.ToDoList" Width="1.5" PointX="5.25" PointY="153.875" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.Voucher" Width="1.5" PointX="11.25" PointY="118.5" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.VoucherRecord" Width="1.5" PointX="16.5" PointY="107.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.AggregatedCounter" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.Counter" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.Hash" Width="1.5" PointX="10.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.AggregatedCounter" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.Counter" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.Hash" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.Job" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.JobParameter" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.JobQueue" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.List" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.Schema" Width="1.5" PointX="11.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.Server" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NGS_DatabaseModel.Set" Width="1.5" PointX="12.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.JobQueue" Width="1.5" PointX="10.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.List" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.Schema" Width="1.5" PointX="10.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.Server" Width="1.5" PointX="11.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NGS_DatabaseModel.Set" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="NGS_DatabaseModel.State" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_Aspnet_Employee_Session_EMP" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_Aspnet_Employee_Session_Session" ManuallyRouted="false" />
@@ -162,7 +161,7 @@
         <AssociationConnector Association="NGS_DatabaseModel.FK_AspNetClass_FeeType_ToFeeType" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_AspNetFeeChallan_ToDurationType" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_AspNetEmp_Auto_Absent_Session" ManuallyRouted="false" />
-        <AssociationConnector Association="NGS_DatabaseModel.FK__TeacherPe__Emplo__61316BF4" ManuallyRouted="false" />
+        <AssociationConnector Association="NGS_DatabaseModel.FK__TeacherPe__Emplo__0A338187" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_AdvanceSalaryUser" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_AspNetEmployee_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_AspNetEmployee_Attendance_TO_AspNetEmployee" ManuallyRouted="false" />
@@ -266,7 +265,7 @@
         <AssociationConnector Association="NGS_DatabaseModel.FK_Teacher_ToAspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="NGS_DatabaseModel.FK__Event__UserId__5006DFF2" ManuallyRouted="false" />
+        <AssociationConnector Association="NGS_DatabaseModel.FK__Event__UserId__762C88DA" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_AspNetUsers_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_AspNetUsers_Session_Users" ManuallyRouted="false" />
         <AssociationConnector Association="NGS_DatabaseModel.FK_ToDoList_ToAspNetUsers" ManuallyRouted="false" />

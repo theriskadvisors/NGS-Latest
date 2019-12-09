@@ -24,7 +24,7 @@
             });
 
 
-        $('#ClassID').click(function () {
+        $('#ClassID').change(function () {
             var ClassId = $('#ClassID').val();
             $.get('@Url.Action("DiaryByClass")',
                 { classId: ClassId }, function (data) {
@@ -33,9 +33,12 @@
                         debugger;
                         var date = new Date(parseInt(item.Date.replace(/(^.*\()|([+-].*$)/g, '')));
                         date = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
-                        $("#DiaryTbody").append('<tr><td>' + item.ClassName + '</td><td>' + date + '</td><td>' + item.PrincipalApproved_status + '</td><td><a href="/AspNetStudent_HomeWork/Index?HomeWorkId=' + item.Id + '">Edit Diary Comments</a> |<a href="/AspNetSubject_HomeWork/Index?HomeWorkId=' + item.Id + '">Edit Diary</a></td></tr>');
+                        $("#DiaryTbody").append('<tr><td>' + item.ClassName + '</td><td>' + date + '</td><td>' + item.PrincipalApproved_status + '</td><td><a href="/AspNetSubject_HomeWork/Index?HomeWorkId=' + item.Id + '">Edit Diary</a></td></tr>');
                     });
                 });
+
+            //<a href="/AspNetStudent_HomeWork/Index?HomeWorkId=' + item.Id + '">Edit Diary Comments</a> |
+
         });
         $('#ClassIDs').click(function () {
 

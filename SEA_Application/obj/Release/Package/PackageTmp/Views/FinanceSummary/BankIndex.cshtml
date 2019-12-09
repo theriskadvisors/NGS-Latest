@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "BankIndex";
 }
-
 <h2 style="font-family:Montserrat">Bank Account</h2>
 <script>
     $(document).ready(function () {
@@ -54,23 +53,23 @@
         var list = $("#ClassID").html();
         $('#example_length').append(
 
-           '<div class="col-md-1 col-lg-1" style="width:0%;margin-top:10px ;padding-left:1px;">' +
+            '<div class="col-md-1 col-lg-1" style="width:0%;margin-top:10px ;padding-left:1px;">' +
             '<div class="d-bar"></div>' +
             '</div>'
-              +
-           '<div class="col-md-3 col-lg-3" style="margin-top:-10px">' +
-           '<input type="button" class="btn btn-default" onclick="NewAccount()" style="background-color:white;font-family:Montserrat;margin-top:7px;font-weight:700" value="New Account" />' +
-           '</div>' +
-           '</div>');
+            +
+            '<div class="col-md-3 col-lg-3" style="margin-top:-10px">' +
+            '<input type="button" class="btn btn-default" onclick="NewAccount()" style="background-color:white;font-family:Montserrat;margin-top:7px;font-weight:700" value="New Account" />' +
+            '</div>' +
+            '</div>');
         $("#Class").prepend("<option value='0' selected>All</option>");
     }
 </script>
 <style>
-   #example tr > :nth-child(1) {
-    display: none;
-}
+    #example tr > :nth-child(1) {
+        display: none;
+    }
 </style>
-@Html.ActionLink("New Bank Entry", "Bank","FinanceSummary")
+@Html.ActionLink("New Bank Entry", "Bank", "FinanceSummary")
 <div class="box box-primary">
     <div class="box-body">
         <table class="table table-bordered" style="font-family:Montserrat" cellpadding="0" cellspacing="0" border="0" ; id="example">
@@ -88,4 +87,5 @@
         </table>
     </div>
 </div>
+
 

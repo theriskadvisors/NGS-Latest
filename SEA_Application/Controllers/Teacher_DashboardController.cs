@@ -424,7 +424,7 @@ namespace SEA_Application.Controllers
         }
         public ViewResult ParentTeacherMeeting()
         {
-            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
+            ViewBag.ClassID = new SelectList(db.AspNetSubjects.Where(x => x.TeacherID == TeacherID && x.AspNetClass.SessionID == SessionID ).Select(x => x.AspNetClass).Distinct(), "Id", "ClassName");
             return View("_ParentTeacherMeeting");
         }
 

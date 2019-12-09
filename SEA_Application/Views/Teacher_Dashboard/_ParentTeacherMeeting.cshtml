@@ -1,10 +1,14 @@
 ﻿<script type="text/javascript">
+
+    var _classId;
+    var _subjectId;
+    var _studentId;
+
     $(document).ready(function () {
         $(function () {
            $.get('@Url.Action("CheckPTM","AspNetParentTeacherMeetings")', function (result) {
                if(result=="False")
                {
-
                    $('#container').html('<div class="box box-primary"><div class="box-header with-border">Alert</div><div class="box-body"><div class="callout callout-info"><h4>Sorry! There is no Parent Teacher Meeting Scheduled</h4></div></div></div>');
                }
            });
@@ -19,7 +23,7 @@
 
         // Now take key value pair out of this array
         for (var i = 0; i < cookiearray.length; i++) {
- 
+
             if (cookiearray[i].split('=')[0] == " ClassIDCookie") {
                 ClassIDCookie = cookiearray[i].split('=')[1];
 
@@ -63,11 +67,11 @@
             var selectedSubject = $("#SubjectID").val();
             document.cookie = "StudentIDCookie=" + selectedStudent + ";expires=Thu, 2 Aug 2018 20:47:11 UTC; path=/";
             EvaluationByStudent(selectedStudent, selectedSubject);
-
         });
 
         function SubjectsByClassID(classIDVal) {
-            $.get('@Url.Action("SubjectsByClass")',
+
+            $.get('@Url.Action("SubjectsByClasss")',
                 { id: classIDVal }, function (data) {
 
                     $('#SubjectID').html('');
@@ -77,6 +81,7 @@
                     });
 
                 });
+
         }
 
         function StudentsBySubject(SubjectID) {
@@ -93,16 +98,39 @@
         }
 
         function EvaluationByStudent(StudentID, SubjectID) {
+            //_classId = $("#ClassID").val();
+            //_subjectId = $("#SubjectID").val()
+            //_studentId = $("#StudentID").val()
+
+            //console.log("before");
+            //console.log(_classId);
+            //console.log(_subjectId);
+            //console.log(_studentId);
+
 
             $.get('@Url.Action("Edit", "AspNetPTMAttendance")',
               { studentID: StudentID, subjectID: SubjectID }, function (data) {
                   $("#ParentAttendance").html(data);
-                  $.get('@Url.Action("TeacherFeedback", "AspNetPTM_TeacherFeedback")', function (data) {
-                      $("#Evaluation").html(data);
-
-                  });
               });
+
+            $.get('@Url.Action("TeacherFeedback", "AspNetPTM_TeacherFeedback")', function (data) {
+                $("#Evaluation").html(data);
+            });
+
+
+            //console.log("after");
+            //console.log(_classId);
+            //console.log(_subjectId);
+            //console.log(_studentId);
+
+
+            //$("#ClassID").val(_classId);
+            //$("#SubjectID").val(_subjectId);
+            //$("#StudentID").val(_studentId);
         }
+
+
+
     });
 
 </script>

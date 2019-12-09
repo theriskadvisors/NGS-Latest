@@ -13,27 +13,29 @@ namespace SEA_Application.Controllers
     public class AspNetFeedBackFormController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         // GET: AspNetFeedBackForm
         public ActionResult Index()
         {
-            var aspNetFeedBackForms = db.AspNetFeedBackForms.Include(a => a.AspNetPTMFormRole);
+            var aspNetFeedBackForms = db.AspNetFeedBackForms.Where(x=> x.SessionID == SessionID).Include(a => a.AspNetPTMFormRole);
             return View(aspNetFeedBackForms.ToList());
         }
 
         public ActionResult ParentForm()
         {
             ViewBag.data = "Parent Feedback Form";
-            var aspNetFeedBackForms = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Parent").Include(a => a.AspNetPTMFormRole);
+            var aspNetFeedBackForms = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Parent" && x.SessionID == SessionID).Include(a => a.AspNetPTMFormRole);
             return View("Index", aspNetFeedBackForms.ToList());
         }
 
         public ActionResult TeacherForm()
         {
             ViewBag.data = "Teacher Feedback Form";
-            var aspNetFeedBackForms = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Teacher").Include(a => a.AspNetPTMFormRole);
+            var aspNetFeedBackForms = db.AspNetFeedBackForms.Where(x => x.AspNetPTMFormRole.RoleName == "Teacher" && x.SessionID == SessionID).Include(a => a.AspNetPTMFormRole);
             return View("Index", aspNetFeedBackForms.ToList());
         }
+        
         // GET: AspNetFeedBackForm/Details/5
         public ActionResult Details(int? id)
         {
@@ -66,9 +68,19 @@ namespace SEA_Application.Controllers
         {
             if (ModelState.IsValid)
             {
+                aspNetFeedBackForm.SessionID = SessionID;
                 db.AspNetFeedBackForms.Add(aspNetFeedBackForm);
                 db.SaveChanges();
-                return View("Index");
+
+                if (aspNetFeedBackForm.FormFor == 2)
+                {
+                    return RedirectToAction("ParentForm");
+                }
+                else if (aspNetFeedBackForm.FormFor == 1)
+                {
+                    return RedirectToAction("TeacherForm");
+                }
+                return RedirectToAction("Index");
             }
 
             ViewBag.FormFor = new SelectList(db.AspNetPTMFormRoles, "Id", "RoleName", aspNetFeedBackForm.FormFor);
@@ -102,11 +114,11 @@ namespace SEA_Application.Controllers
             {
                 db.Entry(aspNetFeedBackForm).State = EntityState.Modified;
                 db.SaveChanges();
-                if(aspNetFeedBackForm.FormFor==9)
+                if(aspNetFeedBackForm.FormFor==2)
                 {
                     return RedirectToAction("ParentForm");
                 }
-                else
+                else if (aspNetFeedBackForm.FormFor == 1)
                 {
                     return RedirectToAction("TeacherForm");
                 }

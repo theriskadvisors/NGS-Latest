@@ -13,11 +13,12 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
     public class AspNetPTM_TeacherFeedbackController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         // GET: AspNetPTM_TeacherFeedback
         public ActionResult Index()
         {
-            var aspNetPTM_TeacherFeedback = db.AspNetPTM_TeacherFeedback.Include(a => a.AspNetFeedBackForm).Include(a => a.AspNetPTMAttendance);
+            var aspNetPTM_TeacherFeedback = db.AspNetPTM_TeacherFeedback.Where(x=> x.AspNetFeedBackForm.SessionID == SessionID).Include(a => a.AspNetFeedBackForm).Include(a => a.AspNetPTMAttendance);
             return View(aspNetPTM_TeacherFeedback.ToList());
         }
 
@@ -39,8 +40,8 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
         // GET: AspNetPTM_TeacherFeedback/Create
         public ActionResult Create()
         {
-            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms, "Id", "Question");
-            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances, "Id", "ParentID");
+            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms.Where(x=> x.SessionID == SessionID), "Id", "Question");
+            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances.Where(x=> x.AspNetParentTeacherMeeting.SessionID == SessionID), "Id", "ParentID");
             return View();
         }
 
@@ -58,8 +59,8 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
                 return RedirectToAction("Index");
             }
 
-            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms, "Id", "Question", aspNetPTM_TeacherFeedback.HeadingID);
-            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances, "Id", "ParentID", aspNetPTM_TeacherFeedback.PTMID);
+            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms.Where(x=> x.SessionID == SessionID), "Id", "Question", aspNetPTM_TeacherFeedback.HeadingID);
+            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances.Where(x=> x.AspNetParentTeacherMeeting.SessionID == SessionID), "Id", "ParentID", aspNetPTM_TeacherFeedback.PTMID);
             return View(aspNetPTM_TeacherFeedback);
         }
 
@@ -111,8 +112,8 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
             {
                 return HttpNotFound();
             }
-            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms, "Id", "Question", aspNetPTM_TeacherFeedback.HeadingID);
-            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances, "Id", "ParentID", aspNetPTM_TeacherFeedback.PTMID);
+            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms.Where(x => x.SessionID == SessionID), "Id", "Question", aspNetPTM_TeacherFeedback.HeadingID);
+            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances.Where(x => x.AspNetParentTeacherMeeting.SessionID == SessionID), "Id", "ParentID", aspNetPTM_TeacherFeedback.PTMID);
             return View(aspNetPTM_TeacherFeedback);
         }
 
@@ -129,8 +130,8 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms, "Id", "Question", aspNetPTM_TeacherFeedback.HeadingID);
-            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances, "Id", "ParentID", aspNetPTM_TeacherFeedback.PTMID);
+            ViewBag.HeadingID = new SelectList(db.AspNetFeedBackForms.Where(x => x.SessionID == SessionID), "Id", "Question", aspNetPTM_TeacherFeedback.HeadingID);
+            ViewBag.PTMID = new SelectList(db.AspNetPTMAttendances.Where(x => x.AspNetParentTeacherMeeting.SessionID == SessionID), "Id", "ParentID", aspNetPTM_TeacherFeedback.PTMID);
             return View(aspNetPTM_TeacherFeedback);
         }
 

@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class FeeDiscount
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public FeeDiscount()
         {
             this.StudentDiscounts = new HashSet<StudentDiscount>();
@@ -23,6 +24,7 @@ namespace SEA_Application.Models
         public string Name { get; set; }
         public Nullable<decimal> Amount { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentDiscount> StudentDiscounts { get; set; }
     }
 }

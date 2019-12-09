@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class AspNetVirtualRole
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public AspNetVirtualRole()
         {
             this.AspNetEmployees = new HashSet<AspNetEmployee>();
@@ -23,7 +24,9 @@ namespace SEA_Application.Models
         public int Id { get; set; }
         public string Name { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetEmployee> AspNetEmployees { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetSalary> AspNetSalaries { get; set; }
         public virtual AspNetVirtualRole AspNetVirtualRole1 { get; set; }
         public virtual AspNetVirtualRole AspNetVirtualRole2 { get; set; }

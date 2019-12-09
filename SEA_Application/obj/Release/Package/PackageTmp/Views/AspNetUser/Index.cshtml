@@ -11,9 +11,8 @@
     var table;
     var bgcolor;
     $(document).ready(function () {
-
         table = $("#example").dataTable();
-
+        LoadGridData();
 
         //$('.table').on('mouseover', 'tbody tr', function () {
         //    bgcolor = $(this).css("background-color");
@@ -25,8 +24,9 @@
         //})
 
         $('.table').on('click', 'tbody tr', function () {
+            debugger;
             var td = $(this).children("td");
-            var userName = $(td[1]).html();
+            var userName = $(td[2]).html();
             userName = userName.trim();
 
             if ($(td).html() != "No data available in table")
@@ -155,43 +155,60 @@ else
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Name)
+                                Email
                             </th>
-                            <th>
-                                User Name
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Email)
-                            </th>
+
                             <th>
                                 Phone Number
+                            </th>
+
+                            <th>
+                                UserName
+                            </th>
+                            <th>
+                                Name
                             </th>
                         </tr>
                     </thead>
 
-                    <tbody>
-                        @foreach (var item in Model)
-                           {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td style="text-align:right">
-                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                                </td>
-                            </tr>
-                        }
+                    <tbody id="tblbody">
+                     
                     </tbody>
 
                 </table>
                 <div id="Error"></div>
             </div>
+          
         </div>
         </div>
 </div>
+<script>
+
+    $(document).ready(function () {
+
+    });
+    var LoadGridData = function () {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/AspNetUser/GetAccountantList",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                debugger;
+                data = JSON.parse(data);
+              //  $('#example1').DataTable().destroy();
+                var html = '';
+                for (var i = 0; i < data.length; i++) {
+                    var obj = data[i];
+
+                    table.fnAddData([obj.Email, obj.PhoneNumber, obj.UserName, obj.Name]);
+                }
+                table.fnDraw();
+            //    $('#example1').DataTable().draw();
+                //hideloader("#example1");
+            }
+        });
+    }
+
+</script>

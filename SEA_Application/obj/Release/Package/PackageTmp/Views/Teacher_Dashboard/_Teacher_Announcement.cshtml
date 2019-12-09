@@ -175,6 +175,16 @@
             });
     }
 
+
+    function class_click() {
+        var selectedClass = $("#Class").val();
+     //   document.cookie = "ClassCookie_Announcement=" + selectedClass + ";expires=Thu, 2 Aug 2018 20:47:11 UTC; path=/";
+       SubjectsByClassID(selectedClass);
+      //  window.location.href = "/Teacher_Dashboard/SubjectsByClass?id=" + selectedClass;
+    }
+
+
+
     function SubjectsByClassID(ClassIDVal) {
         $.get('@Url.Action("SubjectsByClass")',
             { id: ClassIDVal }, function (data) {
@@ -186,12 +196,16 @@
                 });
 
             });
-    }
+       
+        //$.get("/Teacher_Dashboard/SubjectsByClass?id=" + ClassIDVal, function (data, status) {
+        //    debugger;
+        //    $('#Subjects').html('');
+        //    $('#Subjects').prop('disabled', false);
+        //    $.each(data, function (i, item) {
+        //        $('#Subjects').append('<option value=' + item.Id + '>' + item.SubjectName + '</option>');
+        //    });
 
-    function class_click() {
-        var selectedClass = $("#Class").val();
-        document.cookie = "ClassCookie_Announcement=" + selectedClass + ";expires=Thu, 2 Aug 2018 20:47:11 UTC; path=/";
-        SubjectsByClassID(selectedClass);
+        //});
     }
 
     function sub_click() {

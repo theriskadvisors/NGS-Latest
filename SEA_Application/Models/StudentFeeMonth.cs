@@ -14,6 +14,7 @@ namespace SEA_Application.Models
     
     public partial class StudentFeeMonth
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public StudentFeeMonth()
         {
             this.Month_Multiplier = new HashSet<Month_Multiplier>();
@@ -35,7 +36,9 @@ namespace SEA_Application.Models
     
         public virtual AspNetSession AspNetSession { get; set; }
         public virtual AspNetStudent AspNetStudent { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Month_Multiplier> Month_Multiplier { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentChallanForm> StudentChallanForms { get; set; }
     }
 }

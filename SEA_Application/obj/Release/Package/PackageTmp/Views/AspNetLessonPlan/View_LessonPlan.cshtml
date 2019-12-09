@@ -4,7 +4,6 @@
     var table;
     $(document).ready(function () {
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         table = $("#example").dataTable();
 
         var subjectcookieval = null;
@@ -39,6 +38,7 @@
             var selectClass = document.getElementById('ClassID');
             selectClass.value = ClassCookie_ViewLsnPlnval;
             SubjectsListGet(ClassCookie_ViewLsnPlnval);
+            //class_click1(ClassCookie_ViewLsnPlnval);
 
 
             if(subjectcookieval != null && DateCookieVal != null)
@@ -69,7 +69,7 @@
 
         $("#EditButton").click(function () {
 
-            
+
             var GetLessonPlanID = $("LessonPlanId").val()
 
                     $.ajax({
@@ -85,7 +85,7 @@
                             alert(xhr.responseText);
                         }
 
-                       
+
                     });
         });
 
@@ -136,7 +136,7 @@
     }
 
     function SubjectsListGet(selectedClass) {
-        $.get('@Url.Action("lesssonSubjectsByClass", "AspNetTopic")',
+        $.get('@Url.Action("lesssonSubjectsByClasses", "AspNetTopic")',
             { id: selectedClass }, function (data) {
                 $('#Subject').html('');
                 $('#Subject').prop('disabled', false);
@@ -151,6 +151,24 @@
                 });
                 table.fnDraw();
             });
+    }
+
+    function class_click1(item) {
+        $.get('@Url.Action("SubjectsProgerssByClass", "AspNetStudentPerformanceReport")',
+                { ClassID: item.value }, function (data) {
+                    $('#Subject').html('');
+                    $('#Subject').prop('disabled', false);
+                    $.each(data.Subjects, function (i, item) {
+                        $('#Subject').append('<option value=' + item.Id + '>' + item.Subjectname + '</option>');
+                    });
+
+                    table.fnClearTable();
+                    $.each(data.lessonlist, function (i, item) {
+                        item.Date = item.Date.split(' ');
+                        table.fnAddData([item.LessonPlanNo + "<input type='hidden' value = " + item.Id + "  />", item.SubjectName, item.Duration, item.Date[0]]);
+                    });
+                    table.fnDraw();
+                });
     }
 
     function DrawTable() {
@@ -271,6 +289,7 @@
         var selectedClass = $("#Class").val();
         document.cookie = "ClassCookie_ViewLsnPln=" + selectedClass + ";expires=Thu, 2 Aug 2018 20:47:11 UTC; path=/";
         SubjectsListGet(selectedClass);
+        //class_click1(ClassCookie_ViewLsnPlnval);
     }
 
     function sub_click() {
@@ -359,7 +378,7 @@ else
             <div class="form-group">
                 <label class="control-label col-md-2">Select Subject</label>
                 <div class="col-md-10">
-                    <select class="form-control" id="SubjectID" disabled></select>
+                    <select class="form-control" id="SubjectID" ></select>
                 </div>
             </div>
   
@@ -442,7 +461,7 @@ else
                     <thead>
                         <tr>
                             <th>
-                                <cente> How it may be carried out</cente>
+                                <center> How it may be carried out</center>
                             </th>
                             <th>
                                 <center>Time/Resources</center>

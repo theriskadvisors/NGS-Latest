@@ -13,11 +13,12 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
     public class AspNetPTMAttendanceController : Controller
     {
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
 
         // GET: AspNetPTMAttendance
         public ActionResult Index()
         {
-            var aspNetPTMAttendances = db.AspNetPTMAttendances.Include(a => a.AspNetParentTeacherMeeting).Include(a => a.AspNetUser).Include(a => a.AspNetSubject);
+            var aspNetPTMAttendances = db.AspNetPTMAttendances.Where(x=> x.AspNetSubject.AspNetClass.SessionID == SessionID).Include(a => a.AspNetParentTeacherMeeting).Include(a => a.AspNetUser).Include(a => a.AspNetSubject);
             return View(aspNetPTMAttendances.ToList());
         }
 
@@ -39,9 +40,9 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
         // GET: AspNetPTMAttendance/Create
         public ActionResult Create()
         {
-            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings, "Id", "Title");
-            ViewBag.ParentID = new SelectList(db.AspNetUsers, "Id", "Email");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName");
+            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings.Where(x=> x.SessionID == SessionID), "Id", "Title");
+            ViewBag.ParentID = new SelectList(db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Parent") && x.Status != "False" && x.AspNetUsers_Session.Any(y=> y.SessionID == SessionID)), "Id", "Email");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             return View();
         }
 
@@ -59,9 +60,9 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings, "Id", "Title", aspNetPTMAttendance.MeetingID);
-            ViewBag.ParentID = new SelectList(db.AspNetUsers, "Id", "Email", aspNetPTMAttendance.ParentID);
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetPTMAttendance.SubjectID);
+            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings.Where(x=> x.SessionID == SessionID), "Id", "Title", aspNetPTMAttendance.MeetingID);
+            ViewBag.ParentID = new SelectList(db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Parent") && x.Status != "False" && x.AspNetUsers_Session.Any(y => y.SessionID == SessionID)), "Id", "Email", aspNetPTMAttendance.ParentID);
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetPTMAttendance.SubjectID);
             return View(aspNetPTMAttendance);
         }
 
@@ -74,9 +75,9 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
         
             AspNetPTMAttendance aspNetPTMAttendance = db.AspNetPTMAttendances.Where(x => x.MeetingID == meetingID && x.SubjectID == subjectID && x.ParentID == parentID).FirstOrDefault();
             Session["PTMID"] = aspNetPTMAttendance.Id;
-            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings, "Id", "Title", aspNetPTMAttendance.MeetingID);
-            ViewBag.ParentID = new SelectList(db.AspNetUsers, "Id", "Name", aspNetPTMAttendance.ParentID);
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetPTMAttendance.SubjectID);
+            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings.Where(x => x.SessionID == SessionID), "Id", "Title", aspNetPTMAttendance.MeetingID);
+            ViewBag.ParentID = new SelectList(db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Parent") && x.Status != "False" && x.AspNetUsers_Session.Any(y => y.SessionID == SessionID)), "Id", "Email", aspNetPTMAttendance.ParentID);
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetPTMAttendance.SubjectID);
             return PartialView(aspNetPTMAttendance);
         }
 
@@ -94,9 +95,9 @@ namespace SEA_Application.Controllers.ParentTeacherMeeting
                 db.SaveChanges();
                 return RedirectToAction("ParentTeacherMeeting","Teacher_Dashboard");
             }
-            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings, "Id", "Title", aspNetPTMAttendance.MeetingID);
-            ViewBag.ParentID = new SelectList(db.AspNetUsers, "Id", "Email", aspNetPTMAttendance.ParentID);
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects, "Id", "SubjectName", aspNetPTMAttendance.SubjectID);
+            ViewBag.MeetingID = new SelectList(db.AspNetParentTeacherMeetings.Where(x => x.SessionID == SessionID), "Id", "Title", aspNetPTMAttendance.MeetingID);
+            ViewBag.ParentID = new SelectList(db.AspNetUsers.Where(x => x.AspNetRoles.Select(y => y.Name).Contains("Parent") && x.Status != "False" && x.AspNetUsers_Session.Any(y => y.SessionID == SessionID)), "Id", "Email", aspNetPTMAttendance.ParentID);
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetPTMAttendance.SubjectID);
             return View(aspNetPTMAttendance);
         }
 
