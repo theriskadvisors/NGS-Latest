@@ -221,7 +221,9 @@ namespace SEA_Application.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult NonManagerialEmployees(RegisterViewModel model)
         {
-            if (1 == 1)
+            int Active_SID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+        if (1 == 1 && Active_SID == SessionID)
+            
 
             {
                 AspNetEmployee emp = new AspNetEmployee();

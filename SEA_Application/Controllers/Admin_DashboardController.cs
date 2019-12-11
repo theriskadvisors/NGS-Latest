@@ -1002,7 +1002,9 @@ namespace SEA_Application.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AccountantRegister(RegisterViewModel model)
         {
-            if (1 == 1)
+           int Active_SID=  db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+
+            if (1 == 1 && Active_SID == SessionID)
             {
                 ApplicationDbContext context = new ApplicationDbContext();
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Name = model.Name, PhoneNumber = Request.Form["cellNo"] };
@@ -1314,8 +1316,9 @@ public ActionResult ConfirmAccount(string id)
                     //                    SendConformationEmail(user);
                   
                     var result = await UserManager.CreateAsync(user, model.Password);
-                    if (result.Succeeded)
-                    {
+                    int Active_SID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+                    if (result.Succeeded && Active_SID == SessionID)
+                       {
 
                         ruffdata rd = new ruffdata();
                         rd.SessionID = SessionID;
@@ -1592,7 +1595,8 @@ public ActionResult ConfirmAccount(string id)
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> TeacherRegister(RegisterViewModel model)
         {
-            if (1==1)
+            int Active_SID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+            if (1 == 1 && Active_SID == SessionID)
             {
                 ApplicationDbContext context = new ApplicationDbContext();
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Name=model.Name, PhoneNumber=Request.Form["cellNo"]  };
@@ -1806,8 +1810,10 @@ public ActionResult ConfirmAccount(string id)
                     IEnumerable<string> selectedsubjects = Request.Form["subjects"].Split(',');
                     var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Name = model.Name, PhoneNumber = Request.Form["cellNo"] };
                     var result = await UserManager.CreateAsync(user, model.Password);
-                    if (result.Succeeded)
-                    {
+                    int Active_SID = db.AspNetSessions.Where(x => x.Status == "Active").FirstOrDefault().Id;
+                   
+                    if (result.Succeeded && Active_SID == SessionID)
+                      {
                         ruffdata rd = new ruffdata();
                         rd.SessionID = SessionID;
                         rd.StudentName = model.Name;
