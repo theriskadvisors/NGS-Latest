@@ -65,7 +65,7 @@
         <div class="col-md-10 col-md-offset-1">
 
             <hr />
-            <button onclick="window.location.href = '/Parent_Dashboard/Student_HomeWork'" style="margin-top:10px" class="btn btn-primary">Back</button>
+            <button onclick="window.location.href = '/Parent_Dashboard/Dashboard'" style="margin-top:10px" class="btn btn-primary">Back</button>
             <button id="save" style="margin-top:10px" class="btn btn-default">Save</button>
             
         </div>
@@ -113,6 +113,7 @@
 
 
         $('#save').click(function () {
+            debugger;
             var cmnt = $('#parent').val();
             var DiaryId = $('#homeworkid').val();
             var status = $("#myselect option:selected").text();

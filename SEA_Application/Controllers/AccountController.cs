@@ -440,7 +440,8 @@ namespace SEA_Application.Controllers
                         if (returnUrl != "")
                         {
 
-                            return RedirectToLocal(returnUrl);
+                        //    return RedirectToLocal(returnUrl);
+                              return RedirectToAction("Dashboard", "Parent_Dashboard");
                         }
 
                         return RedirectToAction("Dashboard", "Parent_Dashboard");

@@ -27,6 +27,7 @@ namespace SEA_Application.Controllers.ParentController
 {
     public class Parent_DashboardController : Controller
     {
+        int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         private string ParentID;
         private static string StudentID;
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
@@ -250,7 +251,9 @@ namespace SEA_Application.Controllers.ParentController
                                     where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+//            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) && x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
+         
             return View();
         }
 
@@ -275,7 +278,9 @@ namespace SEA_Application.Controllers.ParentController
                                     where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+         //   ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) && x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
+         
             return View("_Student_Marks");
         }
 
@@ -285,7 +290,9 @@ namespace SEA_Application.Controllers.ParentController
                                     where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+         //   ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) && x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
+         
             return View("_Student_Attendance");
         }
 
@@ -295,7 +302,9 @@ namespace SEA_Application.Controllers.ParentController
                                     where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+         //   ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) && x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
+         
             return View();
         }
 
@@ -330,7 +339,7 @@ namespace SEA_Application.Controllers.ParentController
                                     where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) &&  x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
             return View("_Student_Announcement");
         }
 
@@ -341,7 +350,9 @@ namespace SEA_Application.Controllers.ParentController
                                     where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+         //   ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) && x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
+         
             return View("_ParentTeacherMeeting");
         }
 
@@ -349,7 +360,7 @@ namespace SEA_Application.Controllers.ParentController
         {
             var children = (from child in db.AspNetUsers
                             join parent_children in db.AspNetParent_Child on child.Id equals parent_children.ChildID
-                            where parent_children.ParentID == ParentID
+                            where parent_children.ParentID == ParentID && db.AspNetUsers_Session.Any(x=> x.AspNetUser.Id == child.Id && x.SessionID == SessionID)
                             select new { child.Id, child.Name }).ToList();
             
             return Json(children, JsonRequestBehavior.AllowGet);
@@ -464,6 +475,7 @@ namespace SEA_Application.Controllers.ParentController
             db.SaveChanges();
             dbTransection.Commit();
 
+
             return Json("Saved", JsonRequestBehavior.AllowGet);
         }
       
@@ -474,8 +486,9 @@ namespace SEA_Application.Controllers.ParentController
                                 join t3 in db.AspNetStudent_Subject on t1.SubjectID equals t3.SubjectID
                                 join t4 in db.AspNetUsers on t3.StudentID equals t4.Id
                                 join t2 in db.AspNetStudent_Announcement on t1.AnnouncementID equals t2.AnnouncementID
-
-                                where t2.StudentID == StudentID && t4.Id == StudentID && t3.SubjectID == subjectID
+                                join t5 in db.AspNetAnnouncements on t2.AnnouncementID equals t5.Id
+                                
+                                where t2.StudentID == StudentID && t4.Id == StudentID && t3.SubjectID == subjectID && t5.SessionID == SessionID
                                 select new { t1.AspNetAnnouncement.Title, t1.Id, t1.AspNetSubject.SubjectName }).ToList();
 
 
@@ -578,7 +591,7 @@ namespace SEA_Application.Controllers.ParentController
         public ActionResult StudentAssessment()
         {
             
-            ViewBag.Session = new SelectList(db.AspNetSessions, "Id", "SessionName");
+            ViewBag.Session = new SelectList(db.AspNetSessions.Where(x=>x.Id == SessionID), "Id", "SessionName");
             return View();
         }
         

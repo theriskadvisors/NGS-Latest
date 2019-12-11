@@ -298,8 +298,12 @@ namespace SEA_Application.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             db.Configuration.LazyLoadingEnabled = false;
             var projects = (from project in db.AspNetProjects
-                               where project.SubjectID == subjectID
+                            join t4 in db.AspNetSubjects on project.SubjectID equals t4.Id
+                           
+
+                             where project.SubjectID == subjectID && t4.AspNetClass.SessionID == SessionID
                             select project).ToList();
+
             return Json(projects, JsonRequestBehavior.AllowGet);
         }
 

@@ -380,7 +380,10 @@ namespace SEA_Application.Controllers.TermAssessmentControllers
             }
             else if(type=="Parent")
             {
-                db.AspNetStudent_Term_Assessment.Where(x => x.StudentID == stdid && x.TermID == TID).FirstOrDefault().ParentsComments = tc;
+                AspNetStudent_Term_Assessment at = new AspNetStudent_Term_Assessment();
+                  at = db.AspNetStudent_Term_Assessment.Where(x => x.StudentID == stdid && x.TermID == TID).FirstOrDefault();
+                  at.ParentsComments = tc;
+                  db.AspNetStudent_Term_Assessment.Add(at);
             }
             else
             {

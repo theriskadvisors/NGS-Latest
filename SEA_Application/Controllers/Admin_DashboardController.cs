@@ -1007,7 +1007,16 @@ namespace SEA_Application.Controllers
                 ApplicationDbContext context = new ApplicationDbContext();
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Name = model.Name, PhoneNumber = Request.Form["cellNo"] };
                 var result = await UserManager.CreateAsync(user, model.Password);
-
+                if (result.Succeeded)
+                {
+                    ruffdata rd = new ruffdata();
+                    rd.SessionID = SessionID;
+                    rd.StudentName = model.Name;
+                    rd.StudentUserName = model.UserName;
+                    rd.StudentPassword = model.Password;
+                    db.ruffdatas.Add(rd);
+                    db.SaveChanges();
+                }
                 AspNetUser Accountant = new AspNetUser();
                 Accountant.Name = user.Name;
                 Accountant.UserName = user.UserName;
@@ -1307,6 +1316,15 @@ public ActionResult ConfirmAccount(string id)
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
+
+                        ruffdata rd = new ruffdata();
+                        rd.SessionID = SessionID;
+                        rd.StudentName = model.Name;
+                        rd.StudentUserName = model.UserName;
+                        rd.StudentPassword = model.Password;
+                        db.ruffdatas.Add(rd);
+                        db.SaveChanges();
+
                         AspNetParent parent = new AspNetParent();
                         parent.FatherName = Request.Form["fatherName"];
                         parent.FatherCellNo = Request.Form["fatherCell"];
@@ -1579,6 +1597,13 @@ public ActionResult ConfirmAccount(string id)
                 ApplicationDbContext context = new ApplicationDbContext();
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, Name=model.Name, PhoneNumber=Request.Form["cellNo"]  };
                 var result = await UserManager.CreateAsync(user, model.Password);
+                ruffdata rd = new ruffdata();
+                rd.SessionID = SessionID;
+                rd.StudentName = model.Name;
+                rd.StudentUserName = model.UserName;
+                rd.StudentPassword = model.Password;
+                db.ruffdatas.Add(rd);
+                db.SaveChanges();
 
                 AspNetUser Teacher = new AspNetUser();
                 Teacher.Name = user.Name;
@@ -1783,6 +1808,15 @@ public ActionResult ConfirmAccount(string id)
                     var result = await UserManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)
                     {
+                        ruffdata rd = new ruffdata();
+                        rd.SessionID = SessionID;
+                        rd.StudentName = model.Name;
+                        rd.StudentUserName = model.UserName;
+                        rd.StudentPassword = model.Password;
+                        db.ruffdatas.Add(rd);
+                        db.SaveChanges();
+
+
                         AspNetStudent student = new AspNetStudent();
                         student.StudentID = user.Id;
                         student.SchoolName = Request.Form["SchoolName"];
