@@ -193,11 +193,11 @@ namespace SEA_Application.Controllers
         {
             AspNetHomework aspNetHomeworks = new AspNetHomework();
             aspNetHomeworks.ClassId = aspNetHomework.ClassId;
-            aspNetHomeworks.Date =      Convert.ToDateTime(aspNetHomework.Date);
+            aspNetHomeworks.Date =  Convert.ToDateTime(aspNetHomework.Date);
 
 
 
-            aspNetHomeworks.PrincipalApproved_status = "Approved";
+            aspNetHomeworks.PrincipalApproved_status = "Created";
             db.AspNetHomeworks.Add(aspNetHomeworks);
             db.SaveChanges();
 
@@ -243,8 +243,8 @@ namespace SEA_Application.Controllers
 
             var classe = db.AspNetClasses.Where(p => p.Id == aspNetHomework.ClassId).FirstOrDefault();
             Utility obj = new Utility();
-            obj.SMSToOffitialsp("Dear Principal, Homework for Class: " + classe.ClassName + " has been assigned. IPC Aziz Avenue Campus.");
-            obj.SMSToOffitialsa("Dear Admin, Homework for Class: " + classe.ClassName + " has been assigned. IPC Aziz Avenue Campus.");
+         //   obj.SMSToOffitialsp("Dear Principal, Homework for Class: " + classe.ClassName + " has been assigned. IPC Aziz Avenue Campus.");
+           // obj.SMSToOffitialsa("Dear Admin, Homework for Class: " + classe.ClassName + " has been assigned. IPC Aziz Avenue Campus.");
             //////////////////////////////////NOTIFICATION///////////////////////////////////
 
 

@@ -179,7 +179,7 @@ namespace SEA_Application.Controllers
                 obj.SMSToOffitialsa("Dear Admin, Project has been assigned. IPC NGS Preschool, Aziz Avenue, Lahore.");
                 AspNetMessage oob = new AspNetMessage();
                 oob.Message = "Dear Parents, The thematic project has been assigned to your child on portal. IPC NGS Preschool, Aziz Avenue, Lahore.";// Title : " + aspNetProject.Title + ", For discription login to Portal please  -
-                obj.SendSMS(oob, Users);
+            //    obj.SendSMS(oob, Users);
                 //Message end
 
 

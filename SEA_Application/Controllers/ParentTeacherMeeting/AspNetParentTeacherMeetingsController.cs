@@ -163,7 +163,7 @@ namespace SEA_Application.Controllers
                     AspNetMessage oob = new AspNetMessage();
                     oob.Message = "Dear Parent, The Parent Teacher Meeting is scheduled on " + aspNetParentTeacherMeeting.Date + " at " + aspNetParentTeacherMeeting.Time + ". Your regularity and punctuality will be appreciated. IPC NGS Preschool, Aziz Avenue, Lahore.";
                        //oob.Message = "Parent Teacher Meeting is arranged,  Title : " + aspNetParentTeacherMeeting.Title + "For discription login to Portal please";
-                    obj.SendSMS(oob, obled);
+                  //  obj.SendSMS(oob, obled);
                     //Message end
 
 

@@ -52,7 +52,7 @@ namespace SEA_Application.Controllers
             AspNetMessage oob = new AspNetMessage();
 
             oob.Message = "Dear Parents, Please check the assigned homework to your child on portal. IPC Aziz Avenue Campus";
-            obtj.SendSMS(oob, ParentList);
+         //   obtj.SendSMS(oob, ParentList);
 
 
             //var obje = db.AspNetHomeworks.Where(x => x.Id == HomeWorkId).FirstOrDefault();

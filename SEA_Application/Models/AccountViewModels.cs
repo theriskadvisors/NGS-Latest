@@ -58,7 +58,7 @@ namespace SEA_Application.Models
         public string Password { get; set; }
 
 
-        [Required]
+      //  [Required]
         [Display(Name = "SessionID")]
         public string SessionID { get; set; }
 
