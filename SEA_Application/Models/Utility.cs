@@ -118,75 +118,75 @@ namespace SEA_Application.Models
             }
         }
 
-        //public void SendSMS(AspNetMessage message, List<string> SenderList)
-        //{
+        public void SendSMS(AspNetMessage message, List<string> SenderList)
+        {
 
-        //    List<string> SMSList = new List<string>();
+            List<string> SMSList = new List<string>();
             
-        //    foreach (var sender in SenderList)
-        //    {
-        //        //db.AspNetUsers.Where(x => x.Id == sender).FirstOrDefault().PhoneNumber = "03209498765";
-        //        //db.SaveChanges();
-        //        var number = db.AspNetUsers.Where(x => x.Id == sender).Select(x => x.PhoneNumber).FirstOrDefault();
-        //        if(number != null)
-        //        {
-        //            var dfd = "92" + number.Substring(1);
-        //            SMSList.Add(dfd);
-        //        }
-        //        else
-        //        {
-        //            //TODO
-        //            var ttio = "This Id don't have their phone number "+ sender +" NGS Portal";
-        //            messagetosupport(ttio);
-        //        }
+            foreach (var sender in SenderList)
+            {
+                //db.AspNetUsers.Where(x => x.Id == sender).FirstOrDefault().PhoneNumber = "03209498765";
+                //db.SaveChanges();
+                var number = db.AspNetUsers.Where(x => x.Id == sender).Select(x => x.PhoneNumber).FirstOrDefault();
+                if(number != null)
+                {
+                    var dfd = "92" + number.Substring(1);
+                    SMSList.Add(dfd);
+                }
+                else
+                {
+                    //TODO
+                    var ttio = "This Id don't have their phone number "+ sender +" NGS Portal";
+                    messagetosupport(ttio);
+                }
                 
-        //    }
-        //     SMSList = new List<string>();
-        //    SMSList.Add("923215008833");//abuzar
-        //    SMSList.Add("923214518884");//arslan
-        //    SMSList.Add("923214064254");//taha
-        //    SMSList.Add("923401562576");//bilal
-        //    //SMSList.Add("923009479542");//natasha
+            }
+             SMSList = new List<string>();
+            SMSList.Add("923215008833");//abuzar
+            SMSList.Add("923214518884");//arslan
+            SMSList.Add("923214064254");//taha
+            SMSList.Add("923401562576");//bilal
+            //SMSList.Add("923009479542");//natasha
 
-        //    foreach (var number in SMSList)
-        //    {
+            foreach (var number in SMSList)
+            {
 
-        //        var url = "http://www.outreach.pk/api/sendsms.php/sendsms/url";
-        //        String result = "";
-        //        String messageer = HttpUtility.UrlEncode(message.Message);
-        //        String strPost = "id=ipcngsch&pass=ipc_ngs123&msg=" + messageer + "&to=" + number + "&mask=IPC-NGS&type=xml&lang=English";
-        //        StreamWriter myWriter = null;
-        //        HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create(url);
-        //        objRequest.Method = "POST";
-        //        objRequest.ContentLength = Encoding.UTF8.GetByteCount(strPost);
-        //        objRequest.ContentType = "application/x-www-form-urlencoded";
-        //        try
-        //        {
-        //            myWriter = new StreamWriter(objRequest.GetRequestStream());
-        //            myWriter.Write(strPost);
-        //        }
-        //        catch (Exception e)
-        //        {
+                var url = "http://www.outreach.pk/api/sendsms.php/sendsms/url";
+                String result = "";
+                String messageer = HttpUtility.UrlEncode(message.Message);
+                String strPost = "id=ipcngsch&pass=ipc_ngs123&msg=" + messageer + "&to=" + number + "&mask=IPC-NGS&type=xml&lang=English";
+                StreamWriter myWriter = null;
+                HttpWebRequest objRequest = (HttpWebRequest)WebRequest.Create(url);
+                objRequest.Method = "POST";
+                objRequest.ContentLength = Encoding.UTF8.GetByteCount(strPost);
+                objRequest.ContentType = "application/x-www-form-urlencoded";
+                try
+                {
+                    myWriter = new StreamWriter(objRequest.GetRequestStream());
+                    myWriter.Write(strPost);
+                }
+                catch (Exception e)
+                {
 
-        //        }
-        //        finally
-        //        {
-        //            myWriter.Close();
-        //        }
-        //        HttpWebResponse objResponse = (HttpWebResponse)objRequest.GetResponse();
-        //        using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
-        //        {
-        //            result = sr.ReadToEnd();
-        //            // Close and clean up the StreamReader
-        //            sr.Close();
-        //        }
-
-
+                }
+                finally
+                {
+                    myWriter.Close();
+                }
+                HttpWebResponse objResponse = (HttpWebResponse)objRequest.GetResponse();
+                using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
+                {
+                    result = sr.ReadToEnd();
+                    // Close and clean up the StreamReader
+                    sr.Close();
+                }
 
 
-        //        var messge = result;
-        //    }
-        //}
+
+
+                var messge = result;
+            }
+        }
 
         public void messagetosupport(string message)
         {
