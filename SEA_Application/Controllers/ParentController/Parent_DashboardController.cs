@@ -325,7 +325,7 @@ namespace SEA_Application.Controllers.ParentController
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            AspNetStudent_Project aspNetStudentProject = db.AspNetStudent_Project.Where(x => x.ProjectID == id && x.StudentID == StudentID).FirstOrDefault();
+            AspNetStudent_Project aspNetStudentProject = db.AspNetStudent_Project.Where(x => x.ProjectID == id).FirstOrDefault();
             if (aspNetStudentProject == null)
             {
                 return HttpNotFound();
