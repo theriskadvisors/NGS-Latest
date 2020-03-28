@@ -20,7 +20,8 @@
                     if (@Model.AspNetProject.FileName != "-/-")
                     {
                         <dd>
-                            @Html.ActionLink(Model.AspNetProject.FileName, "downloadProjectFile", new { id = Model.AspNetProject.Id })
+                            @*@Html.ActionLink(Model.AspNetProject.FileName, "downloadProjectFile", new { id = Model.AspNetProject.Id })*@
+                            <a href="http://www.sea-ngsipc.com/Content/Projects/@Model.AspNetProject.FileName"> @Model.AspNetProject.FileName</a>
                         </dd>
                     }
                     else
