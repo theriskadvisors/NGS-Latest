@@ -87,7 +87,7 @@ namespace SEA_Application.Controllers
                 if (file.ContentLength > 0)
                 {
                     var fileName = Path.GetFileName(file.FileName);
-                    var path = Path.Combine(Server.MapPath("~/App_Data/Projects"), fileName);
+                    var path = Path.Combine(Server.MapPath("~/Content/Projects"), fileName);
                     file.SaveAs(path);
                     aspNetProject.FileName = fileName;
                 }
