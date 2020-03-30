@@ -8,6 +8,7 @@
 
 <script>
     $(document).ready(function () {
+        document.getElementById("submit").disabled = true;
 
         $("#ClassID").prop('required', true);
         $("#SubjectID").prop('required', true);
@@ -22,8 +23,18 @@
         $('#cancel').click(function () {
             window.location.href = '@Url.Action("Dashboard", "Account")';
         });
+
+       
+        $("#SubjectId").change(function () {
+           
+            var subject = $("#SubjectIdDDL").val();
+            document.getElementById("submit").disabled = false;
+         
+        });
+
         $("#ClassID").change(function () {
 
+       
             var selectedClass = $("#ClassID").val();
             $.ajax({
                 type: "POST",
@@ -32,9 +43,8 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    debugger;
                     var sch = JSON.parse(data);
-                    debugger;
+                   
                     var $el = $(".SubjectIdDDL");
                     $el.empty();
                     if (sch.length > 0) {
@@ -44,6 +54,7 @@
                             $el.append($("<option></option>")
                                     .attr("value", sch[i].Value).text(sch[i].Text));
                         }
+                       
                     }
                     else {
                         $el.append($("<option></option>")
@@ -148,7 +159,7 @@
                 <hr />
                 <div class="form-group">
                     <div class="col-md-offset-1 col-lg-offset-1 col-md-2">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="submit" value="Create" class="btn btn-primary" id="submit" />
                         <button class="btn btn-default" onclick="window.location.href = 'Index'">Back</button>
                     </div>
 
