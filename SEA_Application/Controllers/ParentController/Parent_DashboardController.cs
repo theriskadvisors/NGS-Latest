@@ -302,8 +302,8 @@ namespace SEA_Application.Controllers.ParentController
                                     where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
-         //   ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
-            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) && x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
+            ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
+         //   ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id) && x.AspNetClass.SessionID == SessionID), "Id", "SubjectName");
          
             return View();
         }
@@ -330,6 +330,7 @@ namespace SEA_Application.Controllers.ParentController
             {
                 return HttpNotFound();
             }
+            ViewBag.filename = aspNetStudentProject.SubmittedFileName;
             return View(aspNetStudentProject);
         }
 
