@@ -31,9 +31,17 @@ namespace SEA_Application.Controllers.ParentController
         private string ParentID;
         private static string StudentID;
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
+        //public Parent_DashboardController()
+        //{
+        //    ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
+        //}
         public Parent_DashboardController()
         {
-            ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
+           ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
+            if (StudentID == null)
+            {
+                StudentID = db.AspNetParent_Child.Where(x => x.ParentID == ParentID).Select(x => x.ChildID).FirstOrDefault().ToString();
+            }
         }
         
         public ActionResult Dashboard()
@@ -298,8 +306,11 @@ namespace SEA_Application.Controllers.ParentController
 
         public ActionResult Student_Projects()
         {
+            var id2 = User.Identity.GetUserId();
+           string  StudentID1 = db.AspNetParent_Child.Where(x => x.ParentID == id2).Select(x => x.ChildID).FirstOrDefault().ToString();
+           
             List<int> subjectIDs = (from student_subject in db.AspNetStudent_Subject
-                                    where student_subject.StudentID == StudentID
+                                    where student_subject.StudentID == StudentID1
                                     select student_subject.SubjectID).ToList();
 
             ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
