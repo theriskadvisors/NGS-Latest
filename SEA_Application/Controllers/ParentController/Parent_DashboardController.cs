@@ -29,21 +29,39 @@ namespace SEA_Application.Controllers.ParentController
     {
         int SessionID = Int32.Parse(SessionIDStaticController.GlobalSessionID);
         private string ParentID;
-        private static string StudentID;
+        private string StudentID;
+  
+    
+
         private SEA_DatabaseEntities db = new SEA_DatabaseEntities();
         //public Parent_DashboardController()
         //{
         //    ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
         //}
+
+        public string StudentIdbySession
+        {
+          set
+            {
+                Session["S_ID"] = StudentID;
+            }
+            get
+            {
+                string u_id = Session["S_ID"].ToString();
+                return u_id;
+            }
+        }
         public Parent_DashboardController()
         {
+            
            ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
             if (StudentID == null)
             {
                 StudentID = db.AspNetParent_Child.Where(x => x.ParentID == ParentID).Select(x => x.ChildID).FirstOrDefault().ToString();
             }
+         
         }
-        
+
         public ActionResult Dashboard()
         {
             return View("BlankPage");
