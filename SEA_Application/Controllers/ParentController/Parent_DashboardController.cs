@@ -39,26 +39,32 @@ namespace SEA_Application.Controllers.ParentController
         //    ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
         //}
 
-        public string StudentIdbySession
-        {
-          set
-            {
-                Session["S_ID"] = StudentID;
-            }
-            get
-            {
-                string u_id = Session["S_ID"].ToString();
-                return u_id;
-            }
-        }
+        //public string StudentIdbySession
+        //{
+        //  set
+        //    {
+                
+        //    }
+        //    get
+        //    {
+        //        string u_id = Session["S_ID"].ToString();
+        //        return u_id;
+        //    }
+        //}
+
         public Parent_DashboardController()
         {
             
            ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
-            if (StudentID == null)
-            {
-                StudentID = db.AspNetParent_Child.Where(x => x.ParentID == ParentID).Select(x => x.ChildID).FirstOrDefault().ToString();
-            }
+           if (Session["S_ID"].ToString() == null)
+           {
+               StudentID = db.AspNetParent_Child.Where(x => x.ParentID == ParentID).Select(x => x.ChildID).FirstOrDefault().ToString();
+               Session["S_ID"] = StudentID;
+           }
+           else
+           {
+               StudentID = Session["S_ID"].ToString();
+           }
          
         }
 
