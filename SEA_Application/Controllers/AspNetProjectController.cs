@@ -229,6 +229,7 @@ namespace SEA_Application.Controllers
 
             ViewBag.ClassID = new SelectList(db.AspNetClasses.Where(x=> x.SessionID == SessionID), "Id", "ClassName");
             ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x=> x.AspNetClass.SessionID == SessionID), "Id", "SubjectName", aspNetProject.SubjectID);
+            TempData["Create"] = "Project has been created";
             return View(aspNetProject);
         }
 
