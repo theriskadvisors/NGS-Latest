@@ -11,7 +11,12 @@ using System.Web.Mvc;
 using System.Web.UI;
 using Clickatell_Service;
 using System.Data.Entity;
+using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
+
+
+
+
 
 //string response;
 //string api = "PUqo7q5gQSCdwOMEpyHw3Q==";
@@ -43,11 +48,11 @@ namespace SEA_Application.Controllers.ParentController
         //{
         //  set
         //    {
-                
+
         //    }
         //    get
         //    {
-        //        string u_id = Session["S_ID"].ToString();
+        //        string u_id = Session["SID"].ToString();
         //        return u_id;
         //    }
         //}
@@ -56,16 +61,21 @@ namespace SEA_Application.Controllers.ParentController
         {
             
            ParentID = Convert.ToString(System.Web.HttpContext.Current.Session["ParentID"]);
-           if (Session["S_ID"].ToString() == null)
-           {
-               StudentID = db.AspNetParent_Child.Where(x => x.ParentID == ParentID).Select(x => x.ChildID).FirstOrDefault().ToString();
-               Session["S_ID"] = StudentID;
-           }
-           else
-           {
-               StudentID = Session["S_ID"].ToString();
-           }
-         
+            //Session["parent"] = ParentID;
+            //if (Session != null)
+            //{
+                
+                if (System.Web.HttpContext.Current.Session["SID"] != null)
+                {
+                    StudentID = System.Web.HttpContext.Current.Session["SID"].ToString();
+                }
+                else
+                {
+                    StudentID = db.AspNetParent_Child.Where(x => x.ParentID == ParentID).Select(x => x.ChildID).FirstOrDefault().ToString();
+                    System.Web.HttpContext.Current.Session["SID"] = StudentID;
+                }
+            //}
+           
         }
 
         public ActionResult Dashboard()
@@ -330,11 +340,11 @@ namespace SEA_Application.Controllers.ParentController
 
         public ActionResult Student_Projects()
         {
-            var id2 = User.Identity.GetUserId();
-           string  StudentID1 = db.AspNetParent_Child.Where(x => x.ParentID == id2).Select(x => x.ChildID).FirstOrDefault().ToString();
+           // var id2 = User.Identity.GetUserId();
+           //string  StudentID1 = db.AspNetParent_Child.Where(x => x.ParentID == id2).Select(x => x.ChildID).FirstOrDefault().ToString();
            
             List<int> subjectIDs = (from student_subject in db.AspNetStudent_Subject
-                                    where student_subject.StudentID == StudentID1
+                                    where student_subject.StudentID == StudentID
                                     select student_subject.SubjectID).ToList();
 
             ViewBag.SubjectID = new SelectList(db.AspNetSubjects.Where(x => subjectIDs.Contains(x.Id)), "Id", "SubjectName");
@@ -465,11 +475,9 @@ namespace SEA_Application.Controllers.ParentController
         }
         public JsonResult StudentHomeWork( string id)
         {
-            
-           
-                var homework = (from student_homework in db.AspNetStudent_HomeWork
+            var homework = (from student_homework in db.AspNetStudent_HomeWork
                                 join hw in db.AspNetHomeworks on student_homework.HomeworkID equals hw.Id
-                                where student_homework.StudentID == id && hw.PrincipalApproved_status == "Approved"
+                                where student_homework.StudentID == StudentID && hw.PrincipalApproved_status == "Approved"
                             select new { student_homework.TeacherComments, student_homework.AspNetHomework.Id, student_homework.Reading, student_homework.AspNetHomework.Date }).OrderByDescending(x=>x.Date).ToList();
 
             var rtu = homework.OrderByDescending(p => p.Id);
@@ -550,7 +558,7 @@ namespace SEA_Application.Controllers.ParentController
         public void SetChildID(string studentID)
         {
             StudentID = studentID;
-            Session["ChildID"] = studentID;
+            System.Web.HttpContext.Current.Session["SID"] = studentID;
         }
 
         [HttpGet]
@@ -559,7 +567,7 @@ namespace SEA_Application.Controllers.ParentController
             if (StudentID == null)
             {
                 StudentID = studentID;
-                Session["ChildID"] = studentID;
+                System.Web.HttpContext.Current.Session["SID"] = studentID;
             }
           string v1=  db.AspNetParent_Child.Where(x => x.ChildID == studentID).Select(x => x.ParentID).FirstOrDefault();
           string v2=  db.AspNetParent_Child.Where(x => x.ChildID == StudentID).Select(x => x.ParentID).FirstOrDefault();
@@ -575,8 +583,8 @@ namespace SEA_Application.Controllers.ParentController
         [HttpGet]
         public JsonResult StudentAnnouncement(string studentID)
         {
-            StudentID = studentID;
-            Session["ChildID"] = studentID;
+           // StudentID = studentID;
+           // System.Web.HttpContext.Current.Session["SID"] = studentID;
 
             db.Configuration.ProxyCreationEnabled = false;
             var ann2 = (from t1 in db.AspNetAnnouncement_Subject
