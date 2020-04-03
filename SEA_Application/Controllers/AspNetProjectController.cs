@@ -95,9 +95,17 @@ namespace SEA_Application.Controllers
                 {
                     aspNetProject.FileName = "-/-";
                 }
-                db.AspNetProjects.Add(aspNetProject);
-                db.SaveChanges();
+                if (db.AspNetProjects.Where(x => x.FileName == aspNetProject.FileName).Count() > 0)
+                {
 
+                    TempData["Error"] = "Document already exists kindly change document name";
+                    return RedirectToAction("Create");
+                }
+                else
+                {
+                    db.AspNetProjects.Add(aspNetProject);
+                    db.SaveChanges();
+                }
                 int ProjectID = db.AspNetProjects.Max(x => x.Id);
                  List<string> StudentIDs = db.AspNetStudent_Subject.Where(s => s.SubjectID == aspNetProject.SubjectID).Select(s => s.StudentID).ToList();
                 foreach (var item in StudentIDs)

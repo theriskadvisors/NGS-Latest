@@ -86,7 +86,8 @@
 <h4>Create Project</h4>
 
 <div class="box box-primary">
-    
+
+ <p style="color:red">  @TempData["Error"] </p>
     @using (Html.BeginForm("Create", "AspNetProject", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
